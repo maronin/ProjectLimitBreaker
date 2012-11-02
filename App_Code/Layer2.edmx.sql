@@ -2,8 +2,8 @@
 -- --------------------------------------------------
 -- Entity Designer DDL Script for SQL Server 2005, 2008, and Azure
 -- --------------------------------------------------
--- Date Created: 11/02/2012 11:45:56
--- Generated from EDMX file: C:\Users\Lynart\Documents\Academics\Project LimitBreaker\App_Code\Layer2.edmx
+-- Date Created: 11/02/2012 13:37:55
+-- Generated from EDMX file: C:\Users\Lynart\Documents\Project LimitBreaker\App_Code\Layer2.edmx
 -- --------------------------------------------------
 
 SET QUOTED_IDENTIFIER OFF;
@@ -17,18 +17,129 @@ GO
 -- Dropping existing FOREIGN KEY constraints
 -- --------------------------------------------------
 
+IF OBJECT_ID(N'[dbo].[FK_LoggedExerciseSetAttributes]', 'F') IS NOT NULL
+    ALTER TABLE [dbo].[SetAttributes] DROP CONSTRAINT [FK_LoggedExerciseSetAttributes];
+GO
+IF OBJECT_ID(N'[dbo].[FK_ScheduledExerciseExercise]', 'F') IS NOT NULL
+    ALTER TABLE [dbo].[ScheduledExercises] DROP CONSTRAINT [FK_ScheduledExerciseExercise];
+GO
+IF OBJECT_ID(N'[dbo].[FK_ExerciseGoalSetAttributes]', 'F') IS NOT NULL
+    ALTER TABLE [dbo].[ExerciseGoals] DROP CONSTRAINT [FK_ExerciseGoalSetAttributes];
+GO
+IF OBJECT_ID(N'[dbo].[FK_RoutineExerciseGoal]', 'F') IS NOT NULL
+    ALTER TABLE [dbo].[ExerciseGoals] DROP CONSTRAINT [FK_RoutineExerciseGoal];
+GO
+IF OBJECT_ID(N'[dbo].[FK_ScheduledRoutineRoutine]', 'F') IS NOT NULL
+    ALTER TABLE [dbo].[ScheduledRoutines] DROP CONSTRAINT [FK_ScheduledRoutineRoutine];
+GO
+IF OBJECT_ID(N'[dbo].[FK_SuggestionSuggestedExercise]', 'F') IS NOT NULL
+    ALTER TABLE [dbo].[Suggestions] DROP CONSTRAINT [FK_SuggestionSuggestedExercise];
+GO
+IF OBJECT_ID(N'[dbo].[FK_ScheduledExerciseScheduledReminder]', 'F') IS NOT NULL
+    ALTER TABLE [dbo].[ScheduledExercises] DROP CONSTRAINT [FK_ScheduledExerciseScheduledReminder];
+GO
+IF OBJECT_ID(N'[dbo].[FK_ScheduledRoutineScheduledReminder]', 'F') IS NOT NULL
+    ALTER TABLE [dbo].[ScheduledRoutines] DROP CONSTRAINT [FK_ScheduledRoutineScheduledReminder];
+GO
+IF OBJECT_ID(N'[dbo].[FK_ScheduledExerciseLimitBreaker]', 'F') IS NOT NULL
+    ALTER TABLE [dbo].[ScheduledExercises] DROP CONSTRAINT [FK_ScheduledExerciseLimitBreaker];
+GO
+IF OBJECT_ID(N'[dbo].[FK_LimitBreakerEmailNotification]', 'F') IS NOT NULL
+    ALTER TABLE [dbo].[Notifications_EmailNotification] DROP CONSTRAINT [FK_LimitBreakerEmailNotification];
+GO
+IF OBJECT_ID(N'[dbo].[FK_LimitBreakerStatistics]', 'F') IS NOT NULL
+    ALTER TABLE [dbo].[LimitBreakers] DROP CONSTRAINT [FK_LimitBreakerStatistics];
+GO
+IF OBJECT_ID(N'[dbo].[FK_SuggestionLimitBreaker]', 'F') IS NOT NULL
+    ALTER TABLE [dbo].[Suggestions] DROP CONSTRAINT [FK_SuggestionLimitBreaker];
+GO
+IF OBJECT_ID(N'[dbo].[FK_LimitBreakerRoutine]', 'F') IS NOT NULL
+    ALTER TABLE [dbo].[Routines] DROP CONSTRAINT [FK_LimitBreakerRoutine];
+GO
+IF OBJECT_ID(N'[dbo].[FK_LimitBreakerScheduledRoutine]', 'F') IS NOT NULL
+    ALTER TABLE [dbo].[ScheduledRoutines] DROP CONSTRAINT [FK_LimitBreakerScheduledRoutine];
+GO
+IF OBJECT_ID(N'[dbo].[FK_LimitBreakerLoggedExercise]', 'F') IS NOT NULL
+    ALTER TABLE [dbo].[LoggedExercises] DROP CONSTRAINT [FK_LimitBreakerLoggedExercise];
+GO
+IF OBJECT_ID(N'[dbo].[FK_LoggedExerciseRoutine]', 'F') IS NOT NULL
+    ALTER TABLE [dbo].[LoggedExercises] DROP CONSTRAINT [FK_LoggedExerciseRoutine];
+GO
+IF OBJECT_ID(N'[dbo].[FK_ExerciseLoggedExercise]', 'F') IS NOT NULL
+    ALTER TABLE [dbo].[Exercises] DROP CONSTRAINT [FK_ExerciseLoggedExercise];
+GO
+IF OBJECT_ID(N'[dbo].[FK_ScheduledReminder_inherits_Notification]', 'F') IS NOT NULL
+    ALTER TABLE [dbo].[Notifications_ScheduledReminder] DROP CONSTRAINT [FK_ScheduledReminder_inherits_Notification];
+GO
+IF OBJECT_ID(N'[dbo].[FK_EmailNotification_inherits_Notification]', 'F') IS NOT NULL
+    ALTER TABLE [dbo].[Notifications_EmailNotification] DROP CONSTRAINT [FK_EmailNotification_inherits_Notification];
+GO
+IF OBJECT_ID(N'[dbo].[FK_ExerciseExperience_inherits_Exercise]', 'F') IS NOT NULL
+    ALTER TABLE [dbo].[Exercises_ExerciseExperience] DROP CONSTRAINT [FK_ExerciseExperience_inherits_Exercise];
+GO
 
 -- --------------------------------------------------
 -- Dropping existing tables
 -- --------------------------------------------------
 
+IF OBJECT_ID(N'[dbo].[Exercises]', 'U') IS NOT NULL
+    DROP TABLE [dbo].[Exercises];
+GO
+IF OBJECT_ID(N'[dbo].[ScheduledExercises]', 'U') IS NOT NULL
+    DROP TABLE [dbo].[ScheduledExercises];
+GO
+IF OBJECT_ID(N'[dbo].[LoggedExercises]', 'U') IS NOT NULL
+    DROP TABLE [dbo].[LoggedExercises];
+GO
+IF OBJECT_ID(N'[dbo].[SetAttributes]', 'U') IS NOT NULL
+    DROP TABLE [dbo].[SetAttributes];
+GO
+IF OBJECT_ID(N'[dbo].[ExerciseGoals]', 'U') IS NOT NULL
+    DROP TABLE [dbo].[ExerciseGoals];
+GO
+IF OBJECT_ID(N'[dbo].[Routines]', 'U') IS NOT NULL
+    DROP TABLE [dbo].[Routines];
+GO
+IF OBJECT_ID(N'[dbo].[ScheduledRoutines]', 'U') IS NOT NULL
+    DROP TABLE [dbo].[ScheduledRoutines];
+GO
+IF OBJECT_ID(N'[dbo].[LevelFormulas]', 'U') IS NOT NULL
+    DROP TABLE [dbo].[LevelFormulas];
+GO
+IF OBJECT_ID(N'[dbo].[ExperienceAtrophies]', 'U') IS NOT NULL
+    DROP TABLE [dbo].[ExperienceAtrophies];
+GO
+IF OBJECT_ID(N'[dbo].[Notifications]', 'U') IS NOT NULL
+    DROP TABLE [dbo].[Notifications];
+GO
+IF OBJECT_ID(N'[dbo].[Suggestions]', 'U') IS NOT NULL
+    DROP TABLE [dbo].[Suggestions];
+GO
+IF OBJECT_ID(N'[dbo].[SuggestedExercises]', 'U') IS NOT NULL
+    DROP TABLE [dbo].[SuggestedExercises];
+GO
+IF OBJECT_ID(N'[dbo].[LimitBreakers]', 'U') IS NOT NULL
+    DROP TABLE [dbo].[LimitBreakers];
+GO
+IF OBJECT_ID(N'[dbo].[Statistics]', 'U') IS NOT NULL
+    DROP TABLE [dbo].[Statistics];
+GO
+IF OBJECT_ID(N'[dbo].[Notifications_ScheduledReminder]', 'U') IS NOT NULL
+    DROP TABLE [dbo].[Notifications_ScheduledReminder];
+GO
+IF OBJECT_ID(N'[dbo].[Notifications_EmailNotification]', 'U') IS NOT NULL
+    DROP TABLE [dbo].[Notifications_EmailNotification];
+GO
+IF OBJECT_ID(N'[dbo].[Exercises_ExerciseExperience]', 'U') IS NOT NULL
+    DROP TABLE [dbo].[Exercises_ExerciseExperience];
+GO
 
 -- --------------------------------------------------
 -- Creating all tables
 -- --------------------------------------------------
 
--- Creating table 'Exercises'
-CREATE TABLE [dbo].[Exercises] (
+-- Creating table 'ExerciseBases'
+CREATE TABLE [dbo].[ExerciseBases] (
     [name] nvarchar(max)  NOT NULL,
     [equipment] nvarchar(max)  NOT NULL,
     [videoLink] nvarchar(max)  NULL,
@@ -43,22 +154,14 @@ CREATE TABLE [dbo].[Exercises] (
 );
 GO
 
--- Creating table 'MuscleGroups'
-CREATE TABLE [dbo].[MuscleGroups] (
-    [name] nvarchar(max)  NOT NULL,
-    [Exercise_id] int  NOT NULL,
-    [SuggestedExercise_id] int  NOT NULL
-);
-GO
-
 -- Creating table 'ScheduledExercises'
 CREATE TABLE [dbo].[ScheduledExercises] (
     [startTime] datetime  NOT NULL,
     [NeedEmailNotification] nvarchar(max)  NOT NULL,
-    [id] nvarchar(max)  NOT NULL,
-    [Exercise_id] int  NOT NULL,
-    [ScheduledReminders_Id] int  NOT NULL,
-    [LimitBreakers_Id] int  NOT NULL
+    [id] int IDENTITY(1,1) NOT NULL,
+    [ExerciseBase_id] int  NOT NULL,
+    [ScheduledReminders_id] int  NOT NULL,
+    [LimitBreakers_id] int  NOT NULL
 );
 GO
 
@@ -68,9 +171,8 @@ CREATE TABLE [dbo].[LoggedExercises] (
     [timeLogged] datetime  NOT NULL,
     [note] nvarchar(max)  NULL,
     [id] bigint IDENTITY(1,1) NOT NULL,
-    [Exercise_name] nvarchar(max)  NOT NULL,
-    [Routine_id] int  NOT NULL,
-    [LimitBreaker_Id] int  NOT NULL
+    [LimitBreaker_id] int  NOT NULL,
+    [Routine_id] int  NOT NULL
 );
 GO
 
@@ -98,7 +200,7 @@ CREATE TABLE [dbo].[Routines] (
     [id] int IDENTITY(1,1) NOT NULL,
     [last_modified] datetime  NOT NULL,
     [name] nvarchar(max)  NOT NULL,
-    [LimitBreaker_Id] int  NOT NULL
+    [LimitBreaker_id] int  NOT NULL
 );
 GO
 
@@ -108,14 +210,14 @@ CREATE TABLE [dbo].[ScheduledRoutines] (
     [NeedEmailNotification] nvarchar(max)  NOT NULL,
     [startTime] datetime  NOT NULL,
     [Routine_id] int  NOT NULL,
-    [ScheduledReminders_Id] int  NOT NULL,
-    [LimitBreaker_Id] int  NOT NULL
+    [ScheduledReminders_id] int  NOT NULL,
+    [LimitBreaker_id] int  NOT NULL
 );
 GO
 
 -- Creating table 'LevelFormulas'
 CREATE TABLE [dbo].[LevelFormulas] (
-    [Id] int IDENTITY(1,1) NOT NULL,
+    [id] int IDENTITY(1,1) NOT NULL,
     [maxLevel] int  NOT NULL,
     [expModifier] float  NOT NULL,
     [baseRequired] float  NOT NULL
@@ -124,7 +226,7 @@ GO
 
 -- Creating table 'ExperienceAtrophies'
 CREATE TABLE [dbo].[ExperienceAtrophies] (
-    [Id] int IDENTITY(1,1) NOT NULL,
+    [id] int IDENTITY(1,1) NOT NULL,
     [graceDays] int  NOT NULL,
     [baseLoss] float  NOT NULL
 );
@@ -132,7 +234,7 @@ GO
 
 -- Creating table 'Notifications'
 CREATE TABLE [dbo].[Notifications] (
-    [Id] int IDENTITY(1,1) NOT NULL,
+    [id] int IDENTITY(1,1) NOT NULL,
     [dateCreated] datetime  NOT NULL,
     [dateToBeSent] datetime  NOT NULL,
     [userEmail] nvarchar(max)  NOT NULL
@@ -147,7 +249,7 @@ CREATE TABLE [dbo].[Suggestions] (
     [expiryDate] nvarchar(max)  NOT NULL,
     [needuser] nvarchar(max)  NOT NULL,
     [SuggestedExercises_id] int  NOT NULL,
-    [LimitBreakers_Id] int  NOT NULL
+    [LimitBreakers_id] int  NOT NULL
 );
 GO
 
@@ -167,7 +269,7 @@ GO
 
 -- Creating table 'LimitBreakers'
 CREATE TABLE [dbo].[LimitBreakers] (
-    [Id] int IDENTITY(1,1) NOT NULL,
+    [id] int IDENTITY(1,1) NOT NULL,
     [name] nvarchar(max)  NOT NULL,
     [username] nvarchar(max)  NOT NULL,
     [password] nvarchar(max)  NOT NULL,
@@ -195,23 +297,32 @@ CREATE TABLE [dbo].[Statistics] (
 );
 GO
 
+-- Creating table 'MuscleGroups'
+CREATE TABLE [dbo].[MuscleGroups] (
+    [id] smallint IDENTITY(1,1) NOT NULL,
+    [name] nvarchar(max)  NOT NULL,
+    [ExerciseBase_id] int  NOT NULL,
+    [SuggestedExercise_id] int  NOT NULL
+);
+GO
+
 -- Creating table 'Notifications_ScheduledReminder'
 CREATE TABLE [dbo].[Notifications_ScheduledReminder] (
     [message] nvarchar(max)  NOT NULL,
-    [Id] int  NOT NULL
+    [id] int  NOT NULL
 );
 GO
 
 -- Creating table 'Notifications_EmailNotification'
 CREATE TABLE [dbo].[Notifications_EmailNotification] (
     [message] nvarchar(max)  NOT NULL,
-    [Id] int  NOT NULL,
-    [LimitBreaker_Id] int  NOT NULL
+    [id] int  NOT NULL,
+    [LimitBreaker_id] int  NOT NULL
 );
 GO
 
--- Creating table 'Exercises_ExerciseExperience'
-CREATE TABLE [dbo].[Exercises_ExerciseExperience] (
+-- Creating table 'ExerciseBases_Exercise'
+CREATE TABLE [dbo].[ExerciseBases_Exercise] (
     [baseExperiecne] nvarchar(max)  NOT NULL,
     [weightModifier] nvarchar(max)  NOT NULL,
     [heightModifier] nvarchar(max)  NOT NULL,
@@ -225,16 +336,10 @@ GO
 -- Creating all PRIMARY KEY constraints
 -- --------------------------------------------------
 
--- Creating primary key on [id] in table 'Exercises'
-ALTER TABLE [dbo].[Exercises]
-ADD CONSTRAINT [PK_Exercises]
+-- Creating primary key on [id] in table 'ExerciseBases'
+ALTER TABLE [dbo].[ExerciseBases]
+ADD CONSTRAINT [PK_ExerciseBases]
     PRIMARY KEY CLUSTERED ([id] ASC);
-GO
-
--- Creating primary key on [name] in table 'MuscleGroups'
-ALTER TABLE [dbo].[MuscleGroups]
-ADD CONSTRAINT [PK_MuscleGroups]
-    PRIMARY KEY CLUSTERED ([name] ASC);
 GO
 
 -- Creating primary key on [id] in table 'ScheduledExercises'
@@ -273,22 +378,22 @@ ADD CONSTRAINT [PK_ScheduledRoutines]
     PRIMARY KEY CLUSTERED ([id] ASC);
 GO
 
--- Creating primary key on [Id] in table 'LevelFormulas'
+-- Creating primary key on [id] in table 'LevelFormulas'
 ALTER TABLE [dbo].[LevelFormulas]
 ADD CONSTRAINT [PK_LevelFormulas]
-    PRIMARY KEY CLUSTERED ([Id] ASC);
+    PRIMARY KEY CLUSTERED ([id] ASC);
 GO
 
--- Creating primary key on [Id] in table 'ExperienceAtrophies'
+-- Creating primary key on [id] in table 'ExperienceAtrophies'
 ALTER TABLE [dbo].[ExperienceAtrophies]
 ADD CONSTRAINT [PK_ExperienceAtrophies]
-    PRIMARY KEY CLUSTERED ([Id] ASC);
+    PRIMARY KEY CLUSTERED ([id] ASC);
 GO
 
--- Creating primary key on [Id] in table 'Notifications'
+-- Creating primary key on [id] in table 'Notifications'
 ALTER TABLE [dbo].[Notifications]
 ADD CONSTRAINT [PK_Notifications]
-    PRIMARY KEY CLUSTERED ([Id] ASC);
+    PRIMARY KEY CLUSTERED ([id] ASC);
 GO
 
 -- Creating primary key on [id] in table 'Suggestions'
@@ -303,10 +408,10 @@ ADD CONSTRAINT [PK_SuggestedExercises]
     PRIMARY KEY CLUSTERED ([id] ASC);
 GO
 
--- Creating primary key on [Id] in table 'LimitBreakers'
+-- Creating primary key on [id] in table 'LimitBreakers'
 ALTER TABLE [dbo].[LimitBreakers]
 ADD CONSTRAINT [PK_LimitBreakers]
-    PRIMARY KEY CLUSTERED ([Id] ASC);
+    PRIMARY KEY CLUSTERED ([id] ASC);
 GO
 
 -- Creating primary key on [Id] in table 'Statistics'
@@ -315,41 +420,33 @@ ADD CONSTRAINT [PK_Statistics]
     PRIMARY KEY CLUSTERED ([Id] ASC);
 GO
 
--- Creating primary key on [Id] in table 'Notifications_ScheduledReminder'
+-- Creating primary key on [id] in table 'MuscleGroups'
+ALTER TABLE [dbo].[MuscleGroups]
+ADD CONSTRAINT [PK_MuscleGroups]
+    PRIMARY KEY CLUSTERED ([id] ASC);
+GO
+
+-- Creating primary key on [id] in table 'Notifications_ScheduledReminder'
 ALTER TABLE [dbo].[Notifications_ScheduledReminder]
 ADD CONSTRAINT [PK_Notifications_ScheduledReminder]
-    PRIMARY KEY CLUSTERED ([Id] ASC);
+    PRIMARY KEY CLUSTERED ([id] ASC);
 GO
 
--- Creating primary key on [Id] in table 'Notifications_EmailNotification'
+-- Creating primary key on [id] in table 'Notifications_EmailNotification'
 ALTER TABLE [dbo].[Notifications_EmailNotification]
 ADD CONSTRAINT [PK_Notifications_EmailNotification]
-    PRIMARY KEY CLUSTERED ([Id] ASC);
+    PRIMARY KEY CLUSTERED ([id] ASC);
 GO
 
--- Creating primary key on [id] in table 'Exercises_ExerciseExperience'
-ALTER TABLE [dbo].[Exercises_ExerciseExperience]
-ADD CONSTRAINT [PK_Exercises_ExerciseExperience]
+-- Creating primary key on [id] in table 'ExerciseBases_Exercise'
+ALTER TABLE [dbo].[ExerciseBases_Exercise]
+ADD CONSTRAINT [PK_ExerciseBases_Exercise]
     PRIMARY KEY CLUSTERED ([id] ASC);
 GO
 
 -- --------------------------------------------------
 -- Creating all FOREIGN KEY constraints
 -- --------------------------------------------------
-
--- Creating foreign key on [Exercise_id] in table 'MuscleGroups'
-ALTER TABLE [dbo].[MuscleGroups]
-ADD CONSTRAINT [FK_ExerciseMuscleGroup]
-    FOREIGN KEY ([Exercise_id])
-    REFERENCES [dbo].[Exercises]
-        ([id])
-    ON DELETE NO ACTION ON UPDATE NO ACTION;
-
--- Creating non-clustered index for FOREIGN KEY 'FK_ExerciseMuscleGroup'
-CREATE INDEX [IX_FK_ExerciseMuscleGroup]
-ON [dbo].[MuscleGroups]
-    ([Exercise_id]);
-GO
 
 -- Creating foreign key on [LoggedExercise_id] in table 'SetAttributes'
 ALTER TABLE [dbo].[SetAttributes]
@@ -365,18 +462,18 @@ ON [dbo].[SetAttributes]
     ([LoggedExercise_id]);
 GO
 
--- Creating foreign key on [Exercise_id] in table 'ScheduledExercises'
+-- Creating foreign key on [ExerciseBase_id] in table 'ScheduledExercises'
 ALTER TABLE [dbo].[ScheduledExercises]
 ADD CONSTRAINT [FK_ScheduledExerciseExercise]
-    FOREIGN KEY ([Exercise_id])
-    REFERENCES [dbo].[Exercises]
+    FOREIGN KEY ([ExerciseBase_id])
+    REFERENCES [dbo].[ExerciseBases]
         ([id])
     ON DELETE NO ACTION ON UPDATE NO ACTION;
 
 -- Creating non-clustered index for FOREIGN KEY 'FK_ScheduledExerciseExercise'
 CREATE INDEX [IX_FK_ScheduledExerciseExercise]
 ON [dbo].[ScheduledExercises]
-    ([Exercise_id]);
+    ([ExerciseBase_id]);
 GO
 
 -- Creating foreign key on [SetAttribute_id] in table 'ExerciseGoals'
@@ -435,60 +532,60 @@ ON [dbo].[Suggestions]
     ([SuggestedExercises_id]);
 GO
 
--- Creating foreign key on [ScheduledReminders_Id] in table 'ScheduledExercises'
+-- Creating foreign key on [ScheduledReminders_id] in table 'ScheduledExercises'
 ALTER TABLE [dbo].[ScheduledExercises]
 ADD CONSTRAINT [FK_ScheduledExerciseScheduledReminder]
-    FOREIGN KEY ([ScheduledReminders_Id])
+    FOREIGN KEY ([ScheduledReminders_id])
     REFERENCES [dbo].[Notifications_ScheduledReminder]
-        ([Id])
+        ([id])
     ON DELETE NO ACTION ON UPDATE NO ACTION;
 
 -- Creating non-clustered index for FOREIGN KEY 'FK_ScheduledExerciseScheduledReminder'
 CREATE INDEX [IX_FK_ScheduledExerciseScheduledReminder]
 ON [dbo].[ScheduledExercises]
-    ([ScheduledReminders_Id]);
+    ([ScheduledReminders_id]);
 GO
 
--- Creating foreign key on [ScheduledReminders_Id] in table 'ScheduledRoutines'
+-- Creating foreign key on [ScheduledReminders_id] in table 'ScheduledRoutines'
 ALTER TABLE [dbo].[ScheduledRoutines]
 ADD CONSTRAINT [FK_ScheduledRoutineScheduledReminder]
-    FOREIGN KEY ([ScheduledReminders_Id])
+    FOREIGN KEY ([ScheduledReminders_id])
     REFERENCES [dbo].[Notifications_ScheduledReminder]
-        ([Id])
+        ([id])
     ON DELETE NO ACTION ON UPDATE NO ACTION;
 
 -- Creating non-clustered index for FOREIGN KEY 'FK_ScheduledRoutineScheduledReminder'
 CREATE INDEX [IX_FK_ScheduledRoutineScheduledReminder]
 ON [dbo].[ScheduledRoutines]
-    ([ScheduledReminders_Id]);
+    ([ScheduledReminders_id]);
 GO
 
--- Creating foreign key on [LimitBreakers_Id] in table 'ScheduledExercises'
+-- Creating foreign key on [LimitBreakers_id] in table 'ScheduledExercises'
 ALTER TABLE [dbo].[ScheduledExercises]
 ADD CONSTRAINT [FK_ScheduledExerciseLimitBreaker]
-    FOREIGN KEY ([LimitBreakers_Id])
+    FOREIGN KEY ([LimitBreakers_id])
     REFERENCES [dbo].[LimitBreakers]
-        ([Id])
+        ([id])
     ON DELETE NO ACTION ON UPDATE NO ACTION;
 
 -- Creating non-clustered index for FOREIGN KEY 'FK_ScheduledExerciseLimitBreaker'
 CREATE INDEX [IX_FK_ScheduledExerciseLimitBreaker]
 ON [dbo].[ScheduledExercises]
-    ([LimitBreakers_Id]);
+    ([LimitBreakers_id]);
 GO
 
--- Creating foreign key on [LimitBreaker_Id] in table 'Notifications_EmailNotification'
+-- Creating foreign key on [LimitBreaker_id] in table 'Notifications_EmailNotification'
 ALTER TABLE [dbo].[Notifications_EmailNotification]
 ADD CONSTRAINT [FK_LimitBreakerEmailNotification]
-    FOREIGN KEY ([LimitBreaker_Id])
+    FOREIGN KEY ([LimitBreaker_id])
     REFERENCES [dbo].[LimitBreakers]
-        ([Id])
+        ([id])
     ON DELETE NO ACTION ON UPDATE NO ACTION;
 
 -- Creating non-clustered index for FOREIGN KEY 'FK_LimitBreakerEmailNotification'
 CREATE INDEX [IX_FK_LimitBreakerEmailNotification]
 ON [dbo].[Notifications_EmailNotification]
-    ([LimitBreaker_Id]);
+    ([LimitBreaker_id]);
 GO
 
 -- Creating foreign key on [Statistics_Id] in table 'LimitBreakers'
@@ -505,60 +602,60 @@ ON [dbo].[LimitBreakers]
     ([Statistics_Id]);
 GO
 
--- Creating foreign key on [LimitBreakers_Id] in table 'Suggestions'
+-- Creating foreign key on [LimitBreakers_id] in table 'Suggestions'
 ALTER TABLE [dbo].[Suggestions]
 ADD CONSTRAINT [FK_SuggestionLimitBreaker]
-    FOREIGN KEY ([LimitBreakers_Id])
+    FOREIGN KEY ([LimitBreakers_id])
     REFERENCES [dbo].[LimitBreakers]
-        ([Id])
+        ([id])
     ON DELETE NO ACTION ON UPDATE NO ACTION;
 
 -- Creating non-clustered index for FOREIGN KEY 'FK_SuggestionLimitBreaker'
 CREATE INDEX [IX_FK_SuggestionLimitBreaker]
 ON [dbo].[Suggestions]
-    ([LimitBreakers_Id]);
+    ([LimitBreakers_id]);
 GO
 
--- Creating foreign key on [LimitBreaker_Id] in table 'Routines'
+-- Creating foreign key on [LimitBreaker_id] in table 'Routines'
 ALTER TABLE [dbo].[Routines]
 ADD CONSTRAINT [FK_LimitBreakerRoutine]
-    FOREIGN KEY ([LimitBreaker_Id])
+    FOREIGN KEY ([LimitBreaker_id])
     REFERENCES [dbo].[LimitBreakers]
-        ([Id])
+        ([id])
     ON DELETE NO ACTION ON UPDATE NO ACTION;
 
 -- Creating non-clustered index for FOREIGN KEY 'FK_LimitBreakerRoutine'
 CREATE INDEX [IX_FK_LimitBreakerRoutine]
 ON [dbo].[Routines]
-    ([LimitBreaker_Id]);
+    ([LimitBreaker_id]);
 GO
 
--- Creating foreign key on [LimitBreaker_Id] in table 'ScheduledRoutines'
+-- Creating foreign key on [LimitBreaker_id] in table 'ScheduledRoutines'
 ALTER TABLE [dbo].[ScheduledRoutines]
 ADD CONSTRAINT [FK_LimitBreakerScheduledRoutine]
-    FOREIGN KEY ([LimitBreaker_Id])
+    FOREIGN KEY ([LimitBreaker_id])
     REFERENCES [dbo].[LimitBreakers]
-        ([Id])
+        ([id])
     ON DELETE NO ACTION ON UPDATE NO ACTION;
 
 -- Creating non-clustered index for FOREIGN KEY 'FK_LimitBreakerScheduledRoutine'
 CREATE INDEX [IX_FK_LimitBreakerScheduledRoutine]
 ON [dbo].[ScheduledRoutines]
-    ([LimitBreaker_Id]);
+    ([LimitBreaker_id]);
 GO
 
--- Creating foreign key on [LimitBreaker_Id] in table 'LoggedExercises'
+-- Creating foreign key on [LimitBreaker_id] in table 'LoggedExercises'
 ALTER TABLE [dbo].[LoggedExercises]
 ADD CONSTRAINT [FK_LimitBreakerLoggedExercise]
-    FOREIGN KEY ([LimitBreaker_Id])
+    FOREIGN KEY ([LimitBreaker_id])
     REFERENCES [dbo].[LimitBreakers]
-        ([Id])
+        ([id])
     ON DELETE NO ACTION ON UPDATE NO ACTION;
 
 -- Creating non-clustered index for FOREIGN KEY 'FK_LimitBreakerLoggedExercise'
 CREATE INDEX [IX_FK_LimitBreakerLoggedExercise]
 ON [dbo].[LoggedExercises]
-    ([LimitBreaker_Id]);
+    ([LimitBreaker_id]);
 GO
 
 -- Creating foreign key on [Routine_id] in table 'LoggedExercises'
@@ -575,22 +672,8 @@ ON [dbo].[LoggedExercises]
     ([Routine_id]);
 GO
 
--- Creating foreign key on [SuggestedExercise_id] in table 'MuscleGroups'
-ALTER TABLE [dbo].[MuscleGroups]
-ADD CONSTRAINT [FK_SuggestedExerciseMuscleGroup]
-    FOREIGN KEY ([SuggestedExercise_id])
-    REFERENCES [dbo].[SuggestedExercises]
-        ([id])
-    ON DELETE NO ACTION ON UPDATE NO ACTION;
-
--- Creating non-clustered index for FOREIGN KEY 'FK_SuggestedExerciseMuscleGroup'
-CREATE INDEX [IX_FK_SuggestedExerciseMuscleGroup]
-ON [dbo].[MuscleGroups]
-    ([SuggestedExercise_id]);
-GO
-
--- Creating foreign key on [LoggedExercise_id] in table 'Exercises'
-ALTER TABLE [dbo].[Exercises]
+-- Creating foreign key on [LoggedExercise_id] in table 'ExerciseBases'
+ALTER TABLE [dbo].[ExerciseBases]
 ADD CONSTRAINT [FK_ExerciseLoggedExercise]
     FOREIGN KEY ([LoggedExercise_id])
     REFERENCES [dbo].[LoggedExercises]
@@ -599,33 +682,61 @@ ADD CONSTRAINT [FK_ExerciseLoggedExercise]
 
 -- Creating non-clustered index for FOREIGN KEY 'FK_ExerciseLoggedExercise'
 CREATE INDEX [IX_FK_ExerciseLoggedExercise]
-ON [dbo].[Exercises]
+ON [dbo].[ExerciseBases]
     ([LoggedExercise_id]);
 GO
 
--- Creating foreign key on [Id] in table 'Notifications_ScheduledReminder'
+-- Creating foreign key on [ExerciseBase_id] in table 'MuscleGroups'
+ALTER TABLE [dbo].[MuscleGroups]
+ADD CONSTRAINT [FK_MuscleGroupExercise]
+    FOREIGN KEY ([ExerciseBase_id])
+    REFERENCES [dbo].[ExerciseBases]
+        ([id])
+    ON DELETE NO ACTION ON UPDATE NO ACTION;
+
+-- Creating non-clustered index for FOREIGN KEY 'FK_MuscleGroupExercise'
+CREATE INDEX [IX_FK_MuscleGroupExercise]
+ON [dbo].[MuscleGroups]
+    ([ExerciseBase_id]);
+GO
+
+-- Creating foreign key on [SuggestedExercise_id] in table 'MuscleGroups'
+ALTER TABLE [dbo].[MuscleGroups]
+ADD CONSTRAINT [FK_MuscleGroupSuggestedExercise]
+    FOREIGN KEY ([SuggestedExercise_id])
+    REFERENCES [dbo].[SuggestedExercises]
+        ([id])
+    ON DELETE NO ACTION ON UPDATE NO ACTION;
+
+-- Creating non-clustered index for FOREIGN KEY 'FK_MuscleGroupSuggestedExercise'
+CREATE INDEX [IX_FK_MuscleGroupSuggestedExercise]
+ON [dbo].[MuscleGroups]
+    ([SuggestedExercise_id]);
+GO
+
+-- Creating foreign key on [id] in table 'Notifications_ScheduledReminder'
 ALTER TABLE [dbo].[Notifications_ScheduledReminder]
 ADD CONSTRAINT [FK_ScheduledReminder_inherits_Notification]
-    FOREIGN KEY ([Id])
+    FOREIGN KEY ([id])
     REFERENCES [dbo].[Notifications]
-        ([Id])
+        ([id])
     ON DELETE NO ACTION ON UPDATE NO ACTION;
 GO
 
--- Creating foreign key on [Id] in table 'Notifications_EmailNotification'
+-- Creating foreign key on [id] in table 'Notifications_EmailNotification'
 ALTER TABLE [dbo].[Notifications_EmailNotification]
 ADD CONSTRAINT [FK_EmailNotification_inherits_Notification]
-    FOREIGN KEY ([Id])
+    FOREIGN KEY ([id])
     REFERENCES [dbo].[Notifications]
-        ([Id])
+        ([id])
     ON DELETE NO ACTION ON UPDATE NO ACTION;
 GO
 
--- Creating foreign key on [id] in table 'Exercises_ExerciseExperience'
-ALTER TABLE [dbo].[Exercises_ExerciseExperience]
-ADD CONSTRAINT [FK_ExerciseExperience_inherits_Exercise]
+-- Creating foreign key on [id] in table 'ExerciseBases_Exercise'
+ALTER TABLE [dbo].[ExerciseBases_Exercise]
+ADD CONSTRAINT [FK_Exercise_inherits_ExerciseBase]
     FOREIGN KEY ([id])
-    REFERENCES [dbo].[Exercises]
+    REFERENCES [dbo].[ExerciseBases]
         ([id])
     ON DELETE NO ACTION ON UPDATE NO ACTION;
 GO

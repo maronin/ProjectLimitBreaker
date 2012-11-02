@@ -40,17 +40,11 @@ public partial class Layer2Container : ObjectContext
 
     #region ObjectSet Properties
 
-    public ObjectSet<Exercise> Exercises
+    public ObjectSet<ExerciseBase> ExerciseBases
     {
-        get { return _exercises  ?? (_exercises = CreateObjectSet<Exercise>("Exercises")); }
+        get { return _exerciseBases  ?? (_exerciseBases = CreateObjectSet<ExerciseBase>("ExerciseBases")); }
     }
-    private ObjectSet<Exercise> _exercises;
-
-    public ObjectSet<MuscleGroup> MuscleGroups
-    {
-        get { return _muscleGroups  ?? (_muscleGroups = CreateObjectSet<MuscleGroup>("MuscleGroups")); }
-    }
-    private ObjectSet<MuscleGroup> _muscleGroups;
+    private ObjectSet<ExerciseBase> _exerciseBases;
 
     public ObjectSet<ScheduledExercise> ScheduledExercises
     {
@@ -129,6 +123,12 @@ public partial class Layer2Container : ObjectContext
         get { return _statistics  ?? (_statistics = CreateObjectSet<Statistics>("Statistics")); }
     }
     private ObjectSet<Statistics> _statistics;
+
+    public ObjectSet<MuscleGroup> MuscleGroups
+    {
+        get { return _muscleGroups  ?? (_muscleGroups = CreateObjectSet<MuscleGroup>("MuscleGroups")); }
+    }
+    private ObjectSet<MuscleGroup> _muscleGroups;
 
     #endregion
 }

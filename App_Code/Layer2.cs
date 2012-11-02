@@ -76,7 +76,43 @@ public partial class EmailNotification : Notification
 
     #endregion
 }
-public partial class Exercise
+public partial class Exercise : ExerciseBase
+{
+    #region Primitive Properties
+
+    public virtual string baseExperiecne
+    {
+        get;
+        set;
+    }
+
+    public virtual string weightModifier
+    {
+        get;
+        set;
+    }
+
+    public virtual string heightModifier
+    {
+        get;
+        set;
+    }
+
+    public virtual string distanceModifier
+    {
+        get;
+        set;
+    }
+
+    public virtual string timeModifier
+    {
+        get;
+        set;
+    }
+
+    #endregion
+}
+public partial class ExerciseBase
 {
     #region Primitive Properties
 
@@ -143,6 +179,36 @@ public partial class Exercise
     #endregion
     #region Navigation Properties
 
+    public virtual ScheduledExercise ScheduledExercise
+    {
+        get { return _scheduledExercise; }
+        set
+        {
+            if (!ReferenceEquals(_scheduledExercise, value))
+            {
+                var previousValue = _scheduledExercise;
+                _scheduledExercise = value;
+                FixupScheduledExercise(previousValue);
+            }
+        }
+    }
+    private ScheduledExercise _scheduledExercise;
+
+    public virtual LoggedExercise LoggedExercise
+    {
+        get { return _loggedExercise; }
+        set
+        {
+            if (!ReferenceEquals(_loggedExercise, value))
+            {
+                var previousValue = _loggedExercise;
+                _loggedExercise = value;
+                FixupLoggedExercise(previousValue);
+            }
+        }
+    }
+    private LoggedExercise _loggedExercise;
+
     public virtual ICollection<MuscleGroup> MuscleGroups
     {
         get
@@ -175,62 +241,32 @@ public partial class Exercise
     }
     private ICollection<MuscleGroup> _muscleGroups;
 
-    public virtual ScheduledExercise ScheduledExercise
-    {
-        get { return _scheduledExercise; }
-        set
-        {
-            if (!ReferenceEquals(_scheduledExercise, value))
-            {
-                var previousValue = _scheduledExercise;
-                _scheduledExercise = value;
-                FixupScheduledExercise(previousValue);
-            }
-        }
-    }
-    private ScheduledExercise _scheduledExercise;
-
-    public virtual LoggedExercise LoggedExercise
-    {
-        get { return _loggedExercise; }
-        set
-        {
-            if (!ReferenceEquals(_loggedExercise, value))
-            {
-                var previousValue = _loggedExercise;
-                _loggedExercise = value;
-                FixupLoggedExercise(previousValue);
-            }
-        }
-    }
-    private LoggedExercise _loggedExercise;
-
     #endregion
     #region Association Fixup
 
     private void FixupScheduledExercise(ScheduledExercise previousValue)
     {
-        if (previousValue != null && ReferenceEquals(previousValue.Exercise, this))
+        if (previousValue != null && ReferenceEquals(previousValue.ExerciseBase, this))
         {
-            previousValue.Exercise = null;
+            previousValue.ExerciseBase = null;
         }
 
         if (ScheduledExercise != null)
         {
-            ScheduledExercise.Exercise = this;
+            ScheduledExercise.ExerciseBase = this;
         }
     }
 
     private void FixupLoggedExercise(LoggedExercise previousValue)
     {
-        if (previousValue != null && ReferenceEquals(previousValue.Exercise, this))
+        if (previousValue != null && ReferenceEquals(previousValue.ExerciseBase, this))
         {
-            previousValue.Exercise = null;
+            previousValue.ExerciseBase = null;
         }
 
         if (LoggedExercise != null)
         {
-            LoggedExercise.Exercise = this;
+            LoggedExercise.ExerciseBase = this;
         }
     }
 
@@ -240,7 +276,7 @@ public partial class Exercise
         {
             foreach (MuscleGroup item in e.NewItems)
             {
-                item.Exercise = this;
+                item.ExerciseBase = this;
             }
         }
 
@@ -248,48 +284,12 @@ public partial class Exercise
         {
             foreach (MuscleGroup item in e.OldItems)
             {
-                if (ReferenceEquals(item.Exercise, this))
+                if (ReferenceEquals(item.ExerciseBase, this))
                 {
-                    item.Exercise = null;
+                    item.ExerciseBase = null;
                 }
             }
         }
-    }
-
-    #endregion
-}
-public partial class ExerciseExperience : Exercise
-{
-    #region Primitive Properties
-
-    public virtual string baseExperiecne
-    {
-        get;
-        set;
-    }
-
-    public virtual string weightModifier
-    {
-        get;
-        set;
-    }
-
-    public virtual string heightModifier
-    {
-        get;
-        set;
-    }
-
-    public virtual string distanceModifier
-    {
-        get;
-        set;
-    }
-
-    public virtual string timeModifier
-    {
-        get;
-        set;
     }
 
     #endregion
@@ -396,7 +396,7 @@ public partial class ExperienceAtrophy
 {
     #region Primitive Properties
 
-    public virtual int Id
+    public virtual int id
     {
         get;
         set;
@@ -420,7 +420,7 @@ public partial class LevelFormula
 {
     #region Primitive Properties
 
-    public virtual int Id
+    public virtual int id
     {
         get;
         set;
@@ -450,7 +450,7 @@ public partial class LimitBreaker
 {
     #region Primitive Properties
 
-    public virtual int Id
+    public virtual int id
     {
         get;
         set;
@@ -878,29 +878,6 @@ public partial class LoggedExercise
         set;
     }
 
-    public virtual string Exercise_name
-    {
-        get;
-        set;
-    }
-
-    public virtual int Routine_id
-    {
-        get { return _routine_id; }
-        set
-        {
-            if (_routine_id != value)
-            {
-                if (Routine != null && Routine.id != value)
-                {
-                    Routine = null;
-                }
-                _routine_id = value;
-            }
-        }
-    }
-    private int _routine_id;
-
     #endregion
     #region Navigation Properties
 
@@ -966,20 +943,20 @@ public partial class LoggedExercise
     }
     private Routine _routine;
 
-    public virtual Exercise Exercise
+    public virtual ExerciseBase ExerciseBase
     {
-        get { return _exercise; }
+        get { return _exerciseBase; }
         set
         {
-            if (!ReferenceEquals(_exercise, value))
+            if (!ReferenceEquals(_exerciseBase, value))
             {
-                var previousValue = _exercise;
-                _exercise = value;
-                FixupExercise(previousValue);
+                var previousValue = _exerciseBase;
+                _exerciseBase = value;
+                FixupExerciseBase(previousValue);
             }
         }
     }
-    private Exercise _exercise;
+    private ExerciseBase _exerciseBase;
 
     #endregion
     #region Association Fixup
@@ -1013,23 +990,19 @@ public partial class LoggedExercise
             {
                 Routine.LoggedExercises.Add(this);
             }
-            if (Routine_id != Routine.id)
-            {
-                Routine_id = Routine.id;
-            }
         }
     }
 
-    private void FixupExercise(Exercise previousValue)
+    private void FixupExerciseBase(ExerciseBase previousValue)
     {
         if (previousValue != null && ReferenceEquals(previousValue.LoggedExercise, this))
         {
             previousValue.LoggedExercise = null;
         }
 
-        if (Exercise != null)
+        if (ExerciseBase != null)
         {
-            Exercise.LoggedExercise = this;
+            ExerciseBase.LoggedExercise = this;
         }
     }
 
@@ -1061,6 +1034,12 @@ public partial class MuscleGroup
 {
     #region Primitive Properties
 
+    public virtual short id
+    {
+        get;
+        set;
+    }
+
     public virtual string name
     {
         get;
@@ -1070,20 +1049,20 @@ public partial class MuscleGroup
     #endregion
     #region Navigation Properties
 
-    public virtual Exercise Exercise
+    public virtual ExerciseBase ExerciseBase
     {
-        get { return _exercise; }
+        get { return _exerciseBase; }
         set
         {
-            if (!ReferenceEquals(_exercise, value))
+            if (!ReferenceEquals(_exerciseBase, value))
             {
-                var previousValue = _exercise;
-                _exercise = value;
-                FixupExercise(previousValue);
+                var previousValue = _exerciseBase;
+                _exerciseBase = value;
+                FixupExerciseBase(previousValue);
             }
         }
     }
-    private Exercise _exercise;
+    private ExerciseBase _exerciseBase;
 
     public virtual SuggestedExercise SuggestedExercise
     {
@@ -1103,18 +1082,18 @@ public partial class MuscleGroup
     #endregion
     #region Association Fixup
 
-    private void FixupExercise(Exercise previousValue)
+    private void FixupExerciseBase(ExerciseBase previousValue)
     {
         if (previousValue != null && previousValue.MuscleGroups.Contains(this))
         {
             previousValue.MuscleGroups.Remove(this);
         }
 
-        if (Exercise != null)
+        if (ExerciseBase != null)
         {
-            if (!Exercise.MuscleGroups.Contains(this))
+            if (!ExerciseBase.MuscleGroups.Contains(this))
             {
-                Exercise.MuscleGroups.Add(this);
+                ExerciseBase.MuscleGroups.Add(this);
             }
         }
     }
@@ -1141,7 +1120,7 @@ public partial class Notification
 {
     #region Primitive Properties
 
-    public virtual int Id
+    public virtual int id
     {
         get;
         set;
@@ -1380,7 +1359,7 @@ public partial class ScheduledExercise
         set;
     }
 
-    public virtual string id
+    public virtual int id
     {
         get;
         set;
@@ -1389,20 +1368,20 @@ public partial class ScheduledExercise
     #endregion
     #region Navigation Properties
 
-    public virtual Exercise Exercise
+    public virtual ExerciseBase ExerciseBase
     {
-        get { return _exercise; }
+        get { return _exerciseBase; }
         set
         {
-            if (!ReferenceEquals(_exercise, value))
+            if (!ReferenceEquals(_exerciseBase, value))
             {
-                var previousValue = _exercise;
-                _exercise = value;
-                FixupExercise(previousValue);
+                var previousValue = _exerciseBase;
+                _exerciseBase = value;
+                FixupExerciseBase(previousValue);
             }
         }
     }
-    private Exercise _exercise;
+    private ExerciseBase _exerciseBase;
 
     public virtual ScheduledReminder ScheduledReminders
     {
@@ -1437,16 +1416,16 @@ public partial class ScheduledExercise
     #endregion
     #region Association Fixup
 
-    private void FixupExercise(Exercise previousValue)
+    private void FixupExerciseBase(ExerciseBase previousValue)
     {
         if (previousValue != null && ReferenceEquals(previousValue.ScheduledExercise, this))
         {
             previousValue.ScheduledExercise = null;
         }
 
-        if (Exercise != null)
+        if (ExerciseBase != null)
         {
-            Exercise.ScheduledExercise = this;
+            ExerciseBase.ScheduledExercise = this;
         }
     }
 

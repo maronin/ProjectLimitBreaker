@@ -80,31 +80,31 @@ public partial class Exercise : ExerciseBase
 {
     #region Primitive Properties
 
-    public virtual string baseExperiecne
+    public virtual double baseExperiecne
     {
         get;
         set;
     }
 
-    public virtual string weightModifier
+    public virtual double weightModifier
     {
         get;
         set;
     }
 
-    public virtual string heightModifier
+    public virtual double heightModifier
     {
         get;
         set;
     }
 
-    public virtual string distanceModifier
+    public virtual double distanceModifier
     {
         get;
         set;
     }
 
-    public virtual string timeModifier
+    public virtual double timeModifier
     {
         get;
         set;
@@ -194,20 +194,37 @@ public partial class ExerciseBase
     }
     private ScheduledExercise _scheduledExercise;
 
-    public virtual LoggedExercise LoggedExercise
+    public virtual ICollection<LoggedExercise> LoggedExercise
     {
-        get { return _loggedExercise; }
+        get
+        {
+            if (_loggedExercise == null)
+            {
+                var newCollection = new FixupCollection<LoggedExercise>();
+                newCollection.CollectionChanged += FixupLoggedExercise;
+                _loggedExercise = newCollection;
+            }
+            return _loggedExercise;
+        }
         set
         {
             if (!ReferenceEquals(_loggedExercise, value))
             {
-                var previousValue = _loggedExercise;
+                var previousValue = _loggedExercise as FixupCollection<LoggedExercise>;
+                if (previousValue != null)
+                {
+                    previousValue.CollectionChanged -= FixupLoggedExercise;
+                }
                 _loggedExercise = value;
-                FixupLoggedExercise(previousValue);
+                var newValue = value as FixupCollection<LoggedExercise>;
+                if (newValue != null)
+                {
+                    newValue.CollectionChanged += FixupLoggedExercise;
+                }
             }
         }
     }
-    private LoggedExercise _loggedExercise;
+    private ICollection<LoggedExercise> _loggedExercise;
 
     public virtual ICollection<MuscleGroup> MuscleGroups
     {
@@ -257,16 +274,25 @@ public partial class ExerciseBase
         }
     }
 
-    private void FixupLoggedExercise(LoggedExercise previousValue)
+    private void FixupLoggedExercise(object sender, NotifyCollectionChangedEventArgs e)
     {
-        if (previousValue != null && ReferenceEquals(previousValue.ExerciseBase, this))
+        if (e.NewItems != null)
         {
-            previousValue.ExerciseBase = null;
+            foreach (LoggedExercise item in e.NewItems)
+            {
+                item.ExerciseBase = this;
+            }
         }
 
-        if (LoggedExercise != null)
+        if (e.OldItems != null)
         {
-            LoggedExercise.ExerciseBase = this;
+            foreach (LoggedExercise item in e.OldItems)
+            {
+                if (ReferenceEquals(item.ExerciseBase, this))
+                {
+                    item.ExerciseBase = null;
+                }
+            }
         }
     }
 
@@ -303,23 +329,6 @@ public partial class ExerciseGoal
         get;
         set;
     }
-
-    public virtual int Routine_id
-    {
-        get { return _routine_id; }
-        set
-        {
-            if (_routine_id != value)
-            {
-                if (Routine != null && Routine.id != value)
-                {
-                    Routine = null;
-                }
-                _routine_id = value;
-            }
-        }
-    }
-    private int _routine_id;
 
     #endregion
     #region Navigation Properties
@@ -382,10 +391,6 @@ public partial class ExerciseGoal
             if (!Routine.ExerciseGoals.Contains(this))
             {
                 Routine.ExerciseGoals.Add(this);
-            }
-            if (Routine_id != Routine.id)
-            {
-                Routine_id = Routine.id;
             }
         }
     }
@@ -463,12 +468,6 @@ public partial class LimitBreaker
     }
 
     public virtual string username
-    {
-        get;
-        set;
-    }
-
-    public virtual string password
     {
         get;
         set;
@@ -881,37 +880,20 @@ public partial class LoggedExercise
     #endregion
     #region Navigation Properties
 
-    public virtual ICollection<SetAttributes> SetAttributes
+    public virtual SetAttributes SetAttribute
     {
-        get
-        {
-            if (_setAttributes == null)
-            {
-                var newCollection = new FixupCollection<SetAttributes>();
-                newCollection.CollectionChanged += FixupSetAttributes;
-                _setAttributes = newCollection;
-            }
-            return _setAttributes;
-        }
+        get { return _setAttribute; }
         set
         {
-            if (!ReferenceEquals(_setAttributes, value))
+            if (!ReferenceEquals(_setAttribute, value))
             {
-                var previousValue = _setAttributes as FixupCollection<SetAttributes>;
-                if (previousValue != null)
-                {
-                    previousValue.CollectionChanged -= FixupSetAttributes;
-                }
-                _setAttributes = value;
-                var newValue = value as FixupCollection<SetAttributes>;
-                if (newValue != null)
-                {
-                    newValue.CollectionChanged += FixupSetAttributes;
-                }
+                var previousValue = _setAttribute;
+                _setAttribute = value;
+                FixupSetAttribute(previousValue);
             }
         }
     }
-    private ICollection<SetAttributes> _setAttributes;
+    private SetAttributes _setAttribute;
 
     public virtual LimitBreaker LimitBreaker
     {
@@ -961,6 +943,19 @@ public partial class LoggedExercise
     #endregion
     #region Association Fixup
 
+    private void FixupSetAttribute(SetAttributes previousValue)
+    {
+        if (previousValue != null && ReferenceEquals(previousValue.LoggedExercise, this))
+        {
+            previousValue.LoggedExercise = null;
+        }
+
+        if (SetAttribute != null)
+        {
+            SetAttribute.LoggedExercise = this;
+        }
+    }
+
     private void FixupLimitBreaker(LimitBreaker previousValue)
     {
         if (previousValue != null && previousValue.LoggedExercises.Contains(this))
@@ -995,35 +990,16 @@ public partial class LoggedExercise
 
     private void FixupExerciseBase(ExerciseBase previousValue)
     {
-        if (previousValue != null && ReferenceEquals(previousValue.LoggedExercise, this))
+        if (previousValue != null && previousValue.LoggedExercise.Contains(this))
         {
-            previousValue.LoggedExercise = null;
+            previousValue.LoggedExercise.Remove(this);
         }
 
         if (ExerciseBase != null)
         {
-            ExerciseBase.LoggedExercise = this;
-        }
-    }
-
-    private void FixupSetAttributes(object sender, NotifyCollectionChangedEventArgs e)
-    {
-        if (e.NewItems != null)
-        {
-            foreach (SetAttributes item in e.NewItems)
+            if (!ExerciseBase.LoggedExercise.Contains(this))
             {
-                item.LoggedExercise = this;
-            }
-        }
-
-        if (e.OldItems != null)
-        {
-            foreach (SetAttributes item in e.OldItems)
-            {
-                if (ReferenceEquals(item.LoggedExercise, this))
-                {
-                    item.LoggedExercise = null;
-                }
+                ExerciseBase.LoggedExercise.Add(this);
             }
         }
     }
@@ -1353,7 +1329,7 @@ public partial class ScheduledExercise
         set;
     }
 
-    public virtual string NeedEmailNotification
+    public virtual bool NeedEmailNotification
     {
         get;
         set;
@@ -1544,7 +1520,7 @@ public partial class ScheduledRoutine
         set;
     }
 
-    public virtual string NeedEmailNotification
+    public virtual bool NeedEmailNotification
     {
         get;
         set;
@@ -1673,7 +1649,7 @@ public partial class SetAttributes
         set;
     }
 
-    public virtual Nullable<short> time
+    public virtual Nullable<long> time
     {
         get;
         set;
@@ -1723,17 +1699,14 @@ public partial class SetAttributes
 
     private void FixupLoggedExercise(LoggedExercise previousValue)
     {
-        if (previousValue != null && previousValue.SetAttributes.Contains(this))
+        if (previousValue != null && ReferenceEquals(previousValue.SetAttribute, this))
         {
-            previousValue.SetAttributes.Remove(this);
+            previousValue.SetAttribute = null;
         }
 
         if (LoggedExercise != null)
         {
-            if (!LoggedExercise.SetAttributes.Contains(this))
-            {
-                LoggedExercise.SetAttributes.Add(this);
-            }
+            LoggedExercise.SetAttribute = this;
         }
     }
 
@@ -1756,7 +1729,7 @@ public partial class Statistics
 {
     #region Primitive Properties
 
-    public virtual int Id
+    public virtual int id
     {
         get;
         set;
@@ -1868,25 +1841,25 @@ public partial class SuggestedExercise
         set;
     }
 
-    public virtual int rep
+    public virtual bool rep
     {
         get;
         set;
     }
 
-    public virtual double wieght
+    public virtual bool wieght
     {
         get;
         set;
     }
 
-    public virtual int distance
+    public virtual bool distance
     {
         get;
         set;
     }
 
-    public virtual int time
+    public virtual bool time
     {
         get;
         set;
@@ -2010,13 +1983,7 @@ public partial class Suggestion
         set;
     }
 
-    public virtual string expiryDate
-    {
-        get;
-        set;
-    }
-
-    public virtual string needuser
+    public virtual System.DateTime expiryDate
     {
         get;
         set;

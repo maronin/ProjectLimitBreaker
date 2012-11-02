@@ -127,7 +127,6 @@
     <Property Name="picture" Type="tinyint" Nullable="true" />
     <Property Name="enabled" Type="bit" Nullable="false" />
     <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-    <Property Name="LoggedExercise_id" Type="bigint" Nullable="false" />
   </EntityType>
   <EntityType Name="ScheduledExercises">
     <Key>
@@ -148,8 +147,10 @@
     <Property Name="timeLogged" Type="datetime" Nullable="false" />
     <Property Name="note" Type="nvarchar(max)" Nullable="true" />
     <Property Name="id" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="SetAttribute_id" Type="int" Nullable="false" />
     <Property Name="LimitBreaker_id" Type="int" Nullable="false" />
-    <Property Name="Routine_id" Type="int" Nullable="false" />
+    <Property Name="Routine_id" Type="int" Nullable="true" />
+    <Property Name="ExerciseBase_id" Type="int" Nullable="false" />
   </EntityType>
   <EntityType Name="SetAttributes">
     <Key>
@@ -160,15 +161,14 @@
     <Property Name="distance" Type="float" Nullable="true" />
     <Property Name="time" Type="smallint" Nullable="true" />
     <Property Name="reps" Type="smallint" Nullable="true" />
-    <Property Name="LoggedExercise_id" Type="bigint" Nullable="false" />
   </EntityType>
   <EntityType Name="ExerciseGoals">
     <Key>
       <PropertyRef Name="id" />
     </Key>
     <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-    <Property Name="Routine_id" Type="int" Nullable="false" />
     <Property Name="SetAttribute_id" Type="int" Nullable="false" />
+    <Property Name="Routine_id" Type="int" Nullable="false" />
   </EntityType>
   <EntityType Name="Routines">
     <Key>
@@ -249,7 +249,6 @@
     <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
     <Property Name="name" Type="nvarchar(max)" Nullable="false" />
     <Property Name="username" Type="nvarchar(max)" Nullable="false" />
-    <Property Name="password" Type="nvarchar(max)" Nullable="false" />
     <Property Name="gender" Type="nvarchar(max)" Nullable="false" />
     <Property Name="dateOfBirth" Type="datetime" Nullable="false" />
     <Property Name="verified" Type="bit" Nullable="false" />
@@ -257,13 +256,13 @@
     <Property Name="role" Type="nvarchar(max)" Nullable="false" />
     <Property Name="status" Type="nvarchar(max)" Nullable="false" />
     <Property Name="lastTimeSuggestionMade" Type="datetime" Nullable="false" />
-    <Property Name="Statistics_Id" Type="int" Nullable="false" />
+    <Property Name="Statistics_id" Type="int" Nullable="false" />
   </EntityType>
   <EntityType Name="Statistics">
     <Key>
-      <PropertyRef Name="Id" />
+      <PropertyRef Name="id" />
     </Key>
-    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
     <Property Name="level" Type="int" Nullable="false" />
     <Property Name="experience" Type="float" Nullable="false" />
     <Property Name="weight" Type="float" Nullable="false" />
@@ -308,14 +307,14 @@
     <Property Name="id" Type="int" Nullable="false" />
   </EntityType>
   <Association Name="LoggedExerciseSetAttributes">
-    <End Role="LoggedExercise" Type="Layer2.Store.LoggedExercises" Multiplicity="1" />
-    <End Role="SetAttributes" Type="Layer2.Store.SetAttributes" Multiplicity="*" />
+    <End Role="LoggedExercise" Type="Layer2.Store.LoggedExercises" Multiplicity="*" />
+    <End Role="SetAttributes" Type="Layer2.Store.SetAttributes" Multiplicity="1" />
     <ReferentialConstraint>
-      <Principal Role="LoggedExercise">
+      <Principal Role="SetAttributes">
         <PropertyRef Name="id" />
       </Principal>
-      <Dependent Role="SetAttributes">
-        <PropertyRef Name="LoggedExercise_id" />
+      <Dependent Role="LoggedExercise">
+        <PropertyRef Name="SetAttribute_id" />
       </Dependent>
     </ReferentialConstraint>
   </Association>
@@ -432,10 +431,10 @@
     <End Role="Statistics" Type="Layer2.Store.Statistics" Multiplicity="1" />
     <ReferentialConstraint>
       <Principal Role="Statistics">
-        <PropertyRef Name="Id" />
+        <PropertyRef Name="id" />
       </Principal>
       <Dependent Role="LimitBreaker">
-        <PropertyRef Name="Statistics_Id" />
+        <PropertyRef Name="Statistics_id" />
       </Dependent>
     </ReferentialConstraint>
   </Association>
@@ -489,7 +488,7 @@
   </Association>
   <Association Name="LoggedExerciseRoutine">
     <End Role="LoggedExercise" Type="Layer2.Store.LoggedExercises" Multiplicity="*" />
-    <End Role="Routine" Type="Layer2.Store.Routines" Multiplicity="1" />
+    <End Role="Routine" Type="Layer2.Store.Routines" Multiplicity="0..1" />
     <ReferentialConstraint>
       <Principal Role="Routine">
         <PropertyRef Name="id" />
@@ -500,14 +499,14 @@
     </ReferentialConstraint>
   </Association>
   <Association Name="ExerciseLoggedExercise">
-    <End Role="Exercise" Type="Layer2.Store.ExerciseBases" Multiplicity="*" />
-    <End Role="LoggedExercise" Type="Layer2.Store.LoggedExercises" Multiplicity="1" />
+    <End Role="Exercise" Type="Layer2.Store.ExerciseBases" Multiplicity="1" />
+    <End Role="LoggedExercise" Type="Layer2.Store.LoggedExercises" Multiplicity="*" />
     <ReferentialConstraint>
-      <Principal Role="LoggedExercise">
+      <Principal Role="Exercise">
         <PropertyRef Name="id" />
       </Principal>
-      <Dependent Role="Exercise">
-        <PropertyRef Name="LoggedExercise_id" />
+      <Dependent Role="LoggedExercise">
+        <PropertyRef Name="ExerciseBase_id" />
       </Dependent>
     </ReferentialConstraint>
   </Association>
@@ -691,7 +690,7 @@
             <PropertyRef Name="id" />
           </Key>
           <Property Type="DateTime" Name="startTime" Nullable="false" annotation:StoreGeneratedPattern="None" />
-          <Property Type="String" Name="NeedEmailNotification" Nullable="false" />
+          <Property Type="Boolean" Name="NeedEmailNotification" Nullable="false" />
           <Property Type="Int32" Name="id" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <NavigationProperty Name="ExerciseBase" Relationship="Layer2.ScheduledExerciseExercise" FromRole="ScheduledExercise" ToRole="Exercise" />
           <NavigationProperty Name="ScheduledReminders" Relationship="Layer2.ScheduledExerciseScheduledReminder" FromRole="ScheduledExercise" ToRole="ScheduledReminder" />
@@ -705,7 +704,7 @@
           <Property Type="DateTime" Name="timeLogged" Nullable="false" />
           <Property Type="String" Name="note" Nullable="true" />
           <Property Type="Int64" Name="id" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <NavigationProperty Name="SetAttributes" Relationship="Layer2.LoggedExerciseSetAttributes" FromRole="LoggedExercise" ToRole="SetAttributes" />
+          <NavigationProperty Name="SetAttribute" Relationship="Layer2.LoggedExerciseSetAttributes" FromRole="LoggedExercise" ToRole="SetAttributes" />
           <NavigationProperty Name="LimitBreaker" Relationship="Layer2.LimitBreakerLoggedExercise" FromRole="LoggedExercise" ToRole="LimitBreaker" />
           <NavigationProperty Name="Routine" Relationship="Layer2.LoggedExerciseRoutine" FromRole="LoggedExercise" ToRole="Routine" />
           <NavigationProperty Name="ExerciseBase" Relationship="Layer2.ExerciseLoggedExercise" FromRole="LoggedExercise" ToRole="Exercise" />
@@ -717,14 +716,14 @@
           <Property Type="Int32" Name="id" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Type="Double" Name="weight" Nullable="true" />
           <Property Type="Double" Name="distance" Nullable="true" />
-          <Property Type="Int16" Name="time" Nullable="true" />
+          <Property Type="Int64" Name="time" Nullable="true" />
           <Property Type="Int16" Name="reps" Nullable="true" />
           <NavigationProperty Name="LoggedExercise" Relationship="Layer2.LoggedExerciseSetAttributes" FromRole="SetAttributes" ToRole="LoggedExercise" />
           <NavigationProperty Name="ExerciseGoal" Relationship="Layer2.ExerciseGoalSetAttributes" FromRole="SetAttributes" ToRole="ExerciseGoal" />
         </EntityType>
         <Association Name="LoggedExerciseSetAttributes">
           <End Type="Layer2.LoggedExercise" Role="LoggedExercise" Multiplicity="1" />
-          <End Type="Layer2.SetAttributes" Role="SetAttributes" Multiplicity="*" />
+          <End Type="Layer2.SetAttributes" Role="SetAttributes" Multiplicity="1" />
         </Association>
         <Association Name="ScheduledExerciseExercise">
           <End Type="Layer2.ScheduledExercise" Role="ScheduledExercise" Multiplicity="1" />
@@ -737,7 +736,6 @@
           <Property Type="Int32" Name="id" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <NavigationProperty Name="SetAttribute" Relationship="Layer2.ExerciseGoalSetAttributes" FromRole="ExerciseGoal" ToRole="SetAttributes" />
           <NavigationProperty Name="Routine" Relationship="Layer2.RoutineExerciseGoal" FromRole="ExerciseGoal" ToRole="Routine" />
-          <Property Type="Int32" Name="Routine_id" Nullable="false" />
         </EntityType>
         <Association Name="ExerciseGoalSetAttributes">
           <End Type="Layer2.ExerciseGoal" Role="ExerciseGoal" Multiplicity="1" />
@@ -758,21 +756,13 @@
         <Association Name="RoutineExerciseGoal">
           <End Type="Layer2.Routine" Role="Routine" Multiplicity="1" />
           <End Type="Layer2.ExerciseGoal" Role="ExerciseGoal" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Routine">
-              <PropertyRef Name="id" />
-            </Principal>
-            <Dependent Role="ExerciseGoal">
-              <PropertyRef Name="Routine_id" />
-            </Dependent>
-          </ReferentialConstraint>
         </Association>
         <EntityType Name="ScheduledRoutine">
           <Key>
             <PropertyRef Name="id" />
           </Key>
           <Property Type="Int32" Name="id" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Type="String" Name="NeedEmailNotification" Nullable="false" />
+          <Property Type="Boolean" Name="NeedEmailNotification" Nullable="false" />
           <Property Type="DateTime" Name="startTime" Nullable="false" />
           <NavigationProperty Name="Routine" Relationship="Layer2.ScheduledRoutineRoutine" FromRole="ScheduledRoutine" ToRole="Routine" />
           <NavigationProperty Name="ScheduledReminders" Relationship="Layer2.ScheduledRoutineScheduledReminder" FromRole="ScheduledRoutine" ToRole="ScheduledReminder" />
@@ -783,11 +773,11 @@
           <End Type="Layer2.Routine" Role="Routine" Multiplicity="1" />
         </Association>
         <EntityType Name="Exercise" BaseType="Layer2.ExerciseBase">
-          <Property Type="String" Name="baseExperiecne" Nullable="false" />
-          <Property Type="String" Name="weightModifier" Nullable="false" />
-          <Property Type="String" Name="heightModifier" Nullable="false" />
-          <Property Type="String" Name="distanceModifier" Nullable="false" />
-          <Property Type="String" Name="timeModifier" Nullable="false" />
+          <Property Type="Double" Name="baseExperiecne" Nullable="false" />
+          <Property Type="Double" Name="weightModifier" Nullable="false" />
+          <Property Type="Double" Name="heightModifier" Nullable="false" />
+          <Property Type="Double" Name="distanceModifier" Nullable="false" />
+          <Property Type="Double" Name="timeModifier" Nullable="false" />
         </EntityType>
         <EntityType Name="LevelFormula">
           <Key>
@@ -822,9 +812,8 @@
           <Property Type="Int32" Name="id" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Type="String" Name="reason" Nullable="false" />
           <Property Type="String" Name="status" Nullable="false" />
-          <Property Type="String" Name="expiryDate" Nullable="false" />
+          <Property Type="DateTime" Name="expiryDate" Nullable="false" />
           <NavigationProperty Name="SuggestedExercises" Relationship="Layer2.SuggestionSuggestedExercise" FromRole="Suggestion" ToRole="SuggestedExercise" />
-          <Property Type="String" Name="needuser" Nullable="false" />
           <NavigationProperty Name="LimitBreakers" Relationship="Layer2.SuggestionLimitBreaker" FromRole="Suggestion" ToRole="LimitBreaker" />
         </EntityType>
         <EntityType Name="SuggestedExercise">
@@ -835,10 +824,10 @@
           <Property Type="String" Name="name" Nullable="false" />
           <Property Type="String" Name="equipment" Nullable="false" />
           <Property Type="String" Name="videoLink" Nullable="false" />
-          <Property Type="Int32" Name="rep" Nullable="false" />
-          <Property Type="Double" Name="wieght" Nullable="false" />
-          <Property Type="Int32" Name="distance" Nullable="false" />
-          <Property Type="Int32" Name="time" Nullable="false" />
+          <Property Type="Boolean" Name="rep" Nullable="false" />
+          <Property Type="Boolean" Name="wieght" Nullable="false" />
+          <Property Type="Boolean" Name="distance" Nullable="false" />
+          <Property Type="Boolean" Name="time" Nullable="false" />
           <Property Type="Byte" Name="picture" Nullable="false" />
           <NavigationProperty Name="Suggestion" Relationship="Layer2.SuggestionSuggestedExercise" FromRole="SuggestedExercise" ToRole="Suggestion" />
           <NavigationProperty Name="MuscleGroups" Relationship="Layer2.MuscleGroupSuggestedExercise" FromRole="SuggestedExercise" ToRole="MuscleGroup" />
@@ -870,8 +859,7 @@
           </Key>
           <Property Type="Int32" Name="id" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Type="String" Name="name" Nullable="false" />
-          <Property Type="String" Name="username" Nullable="false" />
-          <Property Type="String" Name="password" Nullable="false" />
+          <Property Name="username" Nullable="false" Type="String" />
           <Property Type="String" Name="gender" Nullable="false" />
           <Property Type="DateTime" Name="dateOfBirth" Nullable="false" />
           <Property Type="Boolean" Name="verified" Nullable="false" />
@@ -897,9 +885,9 @@
         </Association>
         <EntityType Name="Statistics">
           <Key>
-            <PropertyRef Name="Id" />
+            <PropertyRef Name="id" />
           </Key>
-          <Property Type="Int32" Name="Id" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Type="Int32" Name="id" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Type="Int32" Name="level" Nullable="false" />
           <Property Type="Double" Name="experience" Nullable="false" />
           <Property Type="Double" Name="weight" Nullable="false" />
@@ -931,11 +919,11 @@
         </Association>
         <Association Name="LoggedExerciseRoutine">
           <End Type="Layer2.LoggedExercise" Role="LoggedExercise" Multiplicity="*" />
-          <End Type="Layer2.Routine" Role="Routine" Multiplicity="1" />
+          <End Type="Layer2.Routine" Role="Routine" Multiplicity="0..1" />
         </Association>
         <Association Name="ExerciseLoggedExercise">
           <End Type="Layer2.ExerciseBase" Role="Exercise" Multiplicity="1" />
-          <End Type="Layer2.LoggedExercise" Role="LoggedExercise" Multiplicity="1" />
+          <End Type="Layer2.LoggedExercise" Role="LoggedExercise" Multiplicity="*" />
         </Association>
         <EntityType Name="MuscleGroup">
           <Key>
@@ -1020,7 +1008,6 @@
       <EntityTypeMapping TypeName="IsTypeOf(Layer2.ExerciseGoal)">
         <MappingFragment StoreEntitySet="ExerciseGoals">
           <ScalarProperty Name="id" ColumnName="id" />
-          <ScalarProperty Name="Routine_id" ColumnName="Routine_id" />
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
@@ -1090,7 +1077,6 @@
           <ScalarProperty Name="reason" ColumnName="reason" />
           <ScalarProperty Name="status" ColumnName="status" />
           <ScalarProperty Name="expiryDate" ColumnName="expiryDate" />
-          <ScalarProperty Name="needuser" ColumnName="needuser" />
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
@@ -1115,7 +1101,6 @@
           <ScalarProperty Name="id" ColumnName="id" />
           <ScalarProperty Name="name" ColumnName="name" />
           <ScalarProperty Name="username" ColumnName="username" />
-          <ScalarProperty Name="password" ColumnName="password" />
           <ScalarProperty Name="gender" ColumnName="gender" />
           <ScalarProperty Name="dateOfBirth" ColumnName="dateOfBirth" />
           <ScalarProperty Name="verified" ColumnName="verified" />
@@ -1129,7 +1114,7 @@
     <EntitySetMapping Name="Statistics">
       <EntityTypeMapping TypeName="IsTypeOf(Layer2.Statistics)">
         <MappingFragment StoreEntitySet="Statistics">
-          <ScalarProperty Name="Id" ColumnName="Id" />
+          <ScalarProperty Name="id" ColumnName="id" />
           <ScalarProperty Name="level" ColumnName="level" />
           <ScalarProperty Name="experience" ColumnName="experience" />
           <ScalarProperty Name="weight" ColumnName="weight" />
@@ -1148,11 +1133,11 @@
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
-    <AssociationSetMapping Name="LoggedExerciseSetAttributes" TypeName="Layer2.LoggedExerciseSetAttributes" StoreEntitySet="SetAttributes">
-      <EndProperty Name="LoggedExercise">
-        <ScalarProperty Name="id" ColumnName="LoggedExercise_id" />
-      </EndProperty>
+    <AssociationSetMapping Name="LoggedExerciseSetAttributes" TypeName="Layer2.LoggedExerciseSetAttributes" StoreEntitySet="LoggedExercises">
       <EndProperty Name="SetAttributes">
+        <ScalarProperty Name="id" ColumnName="SetAttribute_id" />
+      </EndProperty>
+      <EndProperty Name="LoggedExercise">
         <ScalarProperty Name="id" ColumnName="id" />
       </EndProperty>
     </AssociationSetMapping>
@@ -1167,6 +1152,14 @@
     <AssociationSetMapping Name="ExerciseGoalSetAttributes" TypeName="Layer2.ExerciseGoalSetAttributes" StoreEntitySet="ExerciseGoals">
       <EndProperty Name="SetAttributes">
         <ScalarProperty Name="id" ColumnName="SetAttribute_id" />
+      </EndProperty>
+      <EndProperty Name="ExerciseGoal">
+        <ScalarProperty Name="id" ColumnName="id" />
+      </EndProperty>
+    </AssociationSetMapping>
+    <AssociationSetMapping Name="RoutineExerciseGoal" TypeName="Layer2.RoutineExerciseGoal" StoreEntitySet="ExerciseGoals">
+      <EndProperty Name="Routine">
+        <ScalarProperty Name="id" ColumnName="Routine_id" />
       </EndProperty>
       <EndProperty Name="ExerciseGoal">
         <ScalarProperty Name="id" ColumnName="id" />
@@ -1222,7 +1215,7 @@
     </AssociationSetMapping>
     <AssociationSetMapping Name="LimitBreakerStatistics" TypeName="Layer2.LimitBreakerStatistics" StoreEntitySet="LimitBreakers">
       <EndProperty Name="Statistics">
-        <ScalarProperty Name="Id" ColumnName="Statistics_Id" />
+        <ScalarProperty Name="id" ColumnName="Statistics_id" />
       </EndProperty>
       <EndProperty Name="LimitBreaker">
         <ScalarProperty Name="id" ColumnName="id" />
@@ -1267,12 +1260,13 @@
       <EndProperty Name="LoggedExercise">
         <ScalarProperty Name="id" ColumnName="id" />
       </EndProperty>
+      <Condition ColumnName="Routine_id" IsNull="false" />
     </AssociationSetMapping>
-    <AssociationSetMapping Name="ExerciseLoggedExercise" TypeName="Layer2.ExerciseLoggedExercise" StoreEntitySet="ExerciseBases">
-      <EndProperty Name="LoggedExercise">
-        <ScalarProperty Name="id" ColumnName="LoggedExercise_id" />
-      </EndProperty>
+    <AssociationSetMapping Name="ExerciseLoggedExercise" TypeName="Layer2.ExerciseLoggedExercise" StoreEntitySet="LoggedExercises">
       <EndProperty Name="Exercise">
+        <ScalarProperty Name="id" ColumnName="ExerciseBase_id" />
+      </EndProperty>
+      <EndProperty Name="LoggedExercise">
         <ScalarProperty Name="id" ColumnName="id" />
       </EndProperty>
     </AssociationSetMapping>
@@ -1315,21 +1309,21 @@
         <EntityTypeShape EntityType="Layer2.ExerciseBase" Width="1.5" PointX="3.5" PointY="1.125" Height="3.5186979166666656" />
         <EntityTypeShape EntityType="Layer2.ScheduledExercise" Width="2.25" PointX="3.125" PointY="6.25" Height="1.7879850260416665" />
         <EntityTypeShape EntityType="Layer2.LoggedExercise" Width="1.5" PointX="6.25" PointY="1.75" Height="2.5571907552083335" />
-        <EntityTypeShape EntityType="Layer2.SetAttributes" Width="1.5" PointX="6" PointY="5.5" Height="2.3648893229166656" />
+        <EntityTypeShape EntityType="Layer2.SetAttributes" Width="1.5" PointX="6.25" PointY="5.75" Height="2.3648893229166656" />
         <AssociationConnector Association="Layer2.LoggedExerciseSetAttributes">
-          <ConnectorPoint PointX="6.875" PointY="4.3071907552083335" />
-          <ConnectorPoint PointX="6.875" PointY="5.5" />
+          <ConnectorPoint PointX="7" PointY="4.3071907552083335" />
+          <ConnectorPoint PointX="7" PointY="5.75" />
         </AssociationConnector>
         <AssociationConnector Association="Layer2.ScheduledExerciseExercise">
-          <ConnectorPoint PointX="4.28125" PointY="6.25" />
-          <ConnectorPoint PointX="4.28125" PointY="4.451396484375" />
+          <ConnectorPoint PointX="4.25" PointY="6.25" />
+          <ConnectorPoint PointX="4.25" PointY="4.6436979166666656" />
         </AssociationConnector>
-        <EntityTypeShape EntityType="Layer2.ExerciseGoal" Width="1.5" PointX="9.875" PointY="5.75" Height="1.7879850260416657" />
+        <EntityTypeShape EntityType="Layer2.ExerciseGoal" Width="1.5" PointX="9.875" PointY="5.75" Height="1.5956835937499996" />
         <AssociationConnector Association="Layer2.ExerciseGoalSetAttributes">
-          <ConnectorPoint PointX="9.875" PointY="6.6439925130208328" />
-          <ConnectorPoint PointX="9.4895833333333339" PointY="6.6439925130208319" />
-          <ConnectorPoint PointX="9.3229166666666661" PointY="6.6439925130208328" />
-          <ConnectorPoint PointX="7.5" PointY="6.6439925130208328" />
+          <ConnectorPoint PointX="9.875" PointY="6.547841796875" />
+          <ConnectorPoint PointX="9.4895833333333339" PointY="6.5478417968749989" />
+          <ConnectorPoint PointX="9.3229166666666661" PointY="6.547841796875" />
+          <ConnectorPoint PointX="7.75" PointY="6.547841796875" />
         </AssociationConnector>
         <EntityTypeShape EntityType="Layer2.Routine" Width="1.5" PointX="9.625" PointY="2.25" Height="2.3648893229166665" />
         <AssociationConnector Association="Layer2.RoutineExerciseGoal">
@@ -1345,18 +1339,19 @@
         <EntityTypeShape EntityType="Layer2.LevelFormula" Width="1.5" PointX="7.875" PointY="0.5" Height="1.787985026041667" />
         <EntityTypeShape EntityType="Layer2.ExperienceAtrophy" Width="1.75" PointX="9.875" PointY="0.5" Height="1.59568359375" />
         <EntityTypeShape EntityType="Layer2.Notification" Width="1.5" PointX="13.125" PointY="8.875" Height="2.1725878906249996" />
-        <EntityTypeShape EntityType="Layer2.Suggestion" Width="1.5" PointX="0.5" PointY="10.5" Height="2.1725878906249996" />
+        <EntityTypeShape EntityType="Layer2.Suggestion" Width="1.5" PointX="2.375" PointY="10.625" Height="2.1725878906249996" />
         <EntityTypeShape EntityType="Layer2.SuggestedExercise" Width="1.75" PointX="0.5" PointY="6.25" Height="3.1340950520833335" />
         <AssociationConnector Association="Layer2.SuggestionSuggestedExercise">
-          <ConnectorPoint PointX="1.25" PointY="10.5" />
-          <ConnectorPoint PointX="1.25" PointY="9.3840950520833335" />
+          <ConnectorPoint PointX="2.64843875" PointY="10.625" />
+          <ConnectorPoint PointX="2.64843875" PointY="8.9345914713541656" />
+          <ConnectorPoint PointX="2.25" PointY="8.9345914713541656" />
         </AssociationConnector>
         <EntityTypeShape EntityType="Layer2.ScheduledReminder" Width="1.5" PointX="9.25" PointY="9.125" Height="1.5956835937499996" />
         <EntityTypeShape EntityType="Layer2.EmailNotification" Width="1.5" PointX="13.125" PointY="5.75" Height="1.4033821614583335" />
         <AssociationConnector Association="Layer2.ScheduledExerciseScheduledReminder">
-          <ConnectorPoint PointX="4.25" PointY="8.422587890625" />
-          <ConnectorPoint PointX="4.25" PointY="9.922841796875" />
-          <ConnectorPoint PointX="9.25" PointY="9.922841796875" />
+          <ConnectorPoint PointX="4.53125" PointY="8.422587890625" />
+          <ConnectorPoint PointX="4.53125" PointY="9.71875" />
+          <ConnectorPoint PointX="9.25" PointY="9.71875" />
         </AssociationConnector>
         <AssociationConnector Association="Layer2.ScheduledRoutineScheduledReminder" ManuallyRouted="false">
           <ConnectorPoint PointX="12.125" PointY="4.7999886067708335" />
@@ -1365,21 +1360,19 @@
           <ConnectorPoint PointX="9.40625" PointY="4.7999886067708335" />
           <ConnectorPoint PointX="9.40625" PointY="9.125" />
         </AssociationConnector>
-        <EntityTypeShape EntityType="Layer2.LimitBreaker" Width="2.125" PointX="15.875" PointY="1.5" Height="4.480205078125" />
+        <EntityTypeShape EntityType="Layer2.LimitBreaker" Width="2.125" PointX="15.875" PointY="1.5" Height="4.2879036458333335" />
         <AssociationConnector Association="Layer2.ScheduledExerciseLimitBreaker">
-          <ConnectorPoint PointX="5.375" PointY="8.0886946614583337" />
-          <ConnectorPoint PointX="9.3229166666666661" PointY="8.0886946614583337" />
-          <ConnectorPoint PointX="9.4895833333333339" PointY="8.0886946614583337" />
-          <ConnectorPoint PointX="13.791666666666666" PointY="8.0886946614583337" />
-          <ConnectorPoint PointX="13.958333333333334" PointY="8.0886946614583337" />
-          <ConnectorPoint PointX="16.432289791666665" PointY="8.0886946614583337" />
-          <ConnectorPoint PointX="16.59895645833333" PointY="8.0886946614583337" />
-          <ConnectorPoint PointX="17.2890640625" PointY="8.0886946614583337" />
-          <ConnectorPoint PointX="17.2890640625" PointY="5.980205078125" />
+          <ConnectorPoint PointX="5.375" PointY="8.2999886067708317" />
+          <ConnectorPoint PointX="9.3229166666666661" PointY="8.2999886067708317" />
+          <ConnectorPoint PointX="9.4895833333333339" PointY="8.2999886067708317" />
+          <ConnectorPoint PointX="13.791666666666666" PointY="8.2999886067708317" />
+          <ConnectorPoint PointX="13.958333333333334" PointY="8.2999886067708317" />
+          <ConnectorPoint PointX="16.9375" PointY="8.2999886067708317" />
+          <ConnectorPoint PointX="16.9375" PointY="5.7879036458333335" />
         </AssociationConnector>
         <AssociationConnector Association="Layer2.LimitBreakerEmailNotification">
-          <ConnectorPoint PointX="15.875" PointY="2.09375" />
-          <ConnectorPoint PointX="14.34375" PointY="2.09375" />
+          <ConnectorPoint PointX="15.875" PointY="2.0937500000000004" />
+          <ConnectorPoint PointX="14.34375" PointY="2.0937500000000004" />
           <ConnectorPoint PointX="14.34375" PointY="5.75" />
         </AssociationConnector>
         <EntityTypeShape EntityType="Layer2.Statistics" Width="1.5" PointX="19.125" PointY="2.75" Height="2.7494921874999996" />
@@ -1388,9 +1381,19 @@
           <ConnectorPoint PointX="19.125" PointY="4.12474609375" />
         </AssociationConnector>
         <AssociationConnector Association="Layer2.SuggestionLimitBreaker">
-          <ConnectorPoint PointX="2" PointY="12.016337890625" />
-          <ConnectorPoint PointX="16.3749975" PointY="12.016337890625" />
-          <ConnectorPoint PointX="16.3749975" PointY="5.980205078125" />
+          <ConnectorPoint PointX="2.886721875" PointY="10.625" />
+          <ConnectorPoint PointX="2.886721875" PointY="5.4300439453124989" />
+          <ConnectorPoint PointX="4.166666666666667" PointY="5.430043945312498" />
+          <ConnectorPoint PointX="4.333333333333333" PointY="5.4300439453124989" />
+          <ConnectorPoint PointX="6.916666666666667" PointY="5.430043945312498" />
+          <ConnectorPoint PointX="7.083333333333333" PointY="5.4300439453124989" />
+          <ConnectorPoint PointX="9.3229166666666661" PointY="5.430043945312498" />
+          <ConnectorPoint PointX="9.4895833333333339" PointY="5.4300439453124989" />
+          <ConnectorPoint PointX="10.416666666666666" PointY="5.430043945312498" />
+          <ConnectorPoint PointX="10.583333333333334" PointY="5.4300439453124989" />
+          <ConnectorPoint PointX="14.260416666666666" PointY="5.430043945312498" />
+          <ConnectorPoint PointX="14.427083333333334" PointY="5.4300439453124989" />
+          <ConnectorPoint PointX="15.875" PointY="5.4300439453124989" />
         </AssociationConnector>
         <AssociationConnector Association="Layer2.LimitBreakerRoutine">
           <ConnectorPoint PointX="15.875" PointY="2.46875" />
@@ -1405,15 +1408,17 @@
           <ConnectorPoint PointX="14" PointY="3.8362939453125" />
         </AssociationConnector>
         <AssociationConnector Association="Layer2.LimitBreakerLoggedExercise">
-          <ConnectorPoint PointX="15.875" PointY="5.2112939453125" />
-          <ConnectorPoint PointX="14.427083333333334" PointY="5.2112939453124989" />
-          <ConnectorPoint PointX="14.260416666666666" PointY="5.2112939453125" />
-          <ConnectorPoint PointX="10.583333333333334" PointY="5.2112939453124989" />
-          <ConnectorPoint PointX="10.416666666666666" PointY="5.2112939453125" />
-          <ConnectorPoint PointX="9.4895833333333339" PointY="5.2112939453124989" />
-          <ConnectorPoint PointX="9.3229166666666661" PointY="5.2112939453125" />
-          <ConnectorPoint PointX="7.65625" PointY="5.2112939453125" />
-          <ConnectorPoint PointX="7.65625" PointY="4.3071907552083335" />
+          <ConnectorPoint PointX="15.875" PointY="4.1141907051282045" />
+          <ConnectorPoint PointX="14.427083333333334" PointY="4.1141907051282036" />
+          <ConnectorPoint PointX="14.260416666666666" PointY="4.1141907051282045" />
+          <ConnectorPoint PointX="14.25" PointY="4.1141907051282045" />
+          <ConnectorPoint PointX="14.25" PointY="5.172587890625" />
+          <ConnectorPoint PointX="10.583333333333334" PointY="5.1725878906249987" />
+          <ConnectorPoint PointX="10.416666666666666" PointY="5.172587890625" />
+          <ConnectorPoint PointX="9.4895833333333339" PointY="5.1725878906249987" />
+          <ConnectorPoint PointX="9.3229166666666661" PointY="5.172587890625" />
+          <ConnectorPoint PointX="7.406252" PointY="5.172587890625" />
+          <ConnectorPoint PointX="7.406252" PointY="4.3071907552083335" />
         </AssociationConnector>
         <InheritanceConnector EntityType="Layer2.Exercise">
           <ConnectorPoint PointX="3.5" PointY="1.8026432291666665" />

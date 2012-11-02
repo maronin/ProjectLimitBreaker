@@ -2,7 +2,7 @@
 -- --------------------------------------------------
 -- Entity Designer DDL Script for SQL Server 2005, 2008, and Azure
 -- --------------------------------------------------
--- Date Created: 11/02/2012 13:37:55
+-- Date Created: 11/02/2012 13:54:26
 -- Generated from EDMX file: C:\Users\Lynart\Documents\Project LimitBreaker\App_Code\Layer2.edmx
 -- --------------------------------------------------
 
@@ -66,7 +66,13 @@ IF OBJECT_ID(N'[dbo].[FK_LoggedExerciseRoutine]', 'F') IS NOT NULL
     ALTER TABLE [dbo].[LoggedExercises] DROP CONSTRAINT [FK_LoggedExerciseRoutine];
 GO
 IF OBJECT_ID(N'[dbo].[FK_ExerciseLoggedExercise]', 'F') IS NOT NULL
-    ALTER TABLE [dbo].[Exercises] DROP CONSTRAINT [FK_ExerciseLoggedExercise];
+    ALTER TABLE [dbo].[ExerciseBases] DROP CONSTRAINT [FK_ExerciseLoggedExercise];
+GO
+IF OBJECT_ID(N'[dbo].[FK_MuscleGroupExercise]', 'F') IS NOT NULL
+    ALTER TABLE [dbo].[MuscleGroups] DROP CONSTRAINT [FK_MuscleGroupExercise];
+GO
+IF OBJECT_ID(N'[dbo].[FK_MuscleGroupSuggestedExercise]', 'F') IS NOT NULL
+    ALTER TABLE [dbo].[MuscleGroups] DROP CONSTRAINT [FK_MuscleGroupSuggestedExercise];
 GO
 IF OBJECT_ID(N'[dbo].[FK_ScheduledReminder_inherits_Notification]', 'F') IS NOT NULL
     ALTER TABLE [dbo].[Notifications_ScheduledReminder] DROP CONSTRAINT [FK_ScheduledReminder_inherits_Notification];
@@ -74,16 +80,16 @@ GO
 IF OBJECT_ID(N'[dbo].[FK_EmailNotification_inherits_Notification]', 'F') IS NOT NULL
     ALTER TABLE [dbo].[Notifications_EmailNotification] DROP CONSTRAINT [FK_EmailNotification_inherits_Notification];
 GO
-IF OBJECT_ID(N'[dbo].[FK_ExerciseExperience_inherits_Exercise]', 'F') IS NOT NULL
-    ALTER TABLE [dbo].[Exercises_ExerciseExperience] DROP CONSTRAINT [FK_ExerciseExperience_inherits_Exercise];
+IF OBJECT_ID(N'[dbo].[FK_Exercise_inherits_ExerciseBase]', 'F') IS NOT NULL
+    ALTER TABLE [dbo].[ExerciseBases_Exercise] DROP CONSTRAINT [FK_Exercise_inherits_ExerciseBase];
 GO
 
 -- --------------------------------------------------
 -- Dropping existing tables
 -- --------------------------------------------------
 
-IF OBJECT_ID(N'[dbo].[Exercises]', 'U') IS NOT NULL
-    DROP TABLE [dbo].[Exercises];
+IF OBJECT_ID(N'[dbo].[ExerciseBases]', 'U') IS NOT NULL
+    DROP TABLE [dbo].[ExerciseBases];
 GO
 IF OBJECT_ID(N'[dbo].[ScheduledExercises]', 'U') IS NOT NULL
     DROP TABLE [dbo].[ScheduledExercises];
@@ -124,14 +130,17 @@ GO
 IF OBJECT_ID(N'[dbo].[Statistics]', 'U') IS NOT NULL
     DROP TABLE [dbo].[Statistics];
 GO
+IF OBJECT_ID(N'[dbo].[MuscleGroups]', 'U') IS NOT NULL
+    DROP TABLE [dbo].[MuscleGroups];
+GO
 IF OBJECT_ID(N'[dbo].[Notifications_ScheduledReminder]', 'U') IS NOT NULL
     DROP TABLE [dbo].[Notifications_ScheduledReminder];
 GO
 IF OBJECT_ID(N'[dbo].[Notifications_EmailNotification]', 'U') IS NOT NULL
     DROP TABLE [dbo].[Notifications_EmailNotification];
 GO
-IF OBJECT_ID(N'[dbo].[Exercises_ExerciseExperience]', 'U') IS NOT NULL
-    DROP TABLE [dbo].[Exercises_ExerciseExperience];
+IF OBJECT_ID(N'[dbo].[ExerciseBases_Exercise]', 'U') IS NOT NULL
+    DROP TABLE [dbo].[ExerciseBases_Exercise];
 GO
 
 -- --------------------------------------------------
@@ -149,8 +158,7 @@ CREATE TABLE [dbo].[ExerciseBases] (
     [time] bit  NOT NULL,
     [picture] tinyint  NULL,
     [enabled] bit  NOT NULL,
-    [id] int IDENTITY(1,1) NOT NULL,
-    [LoggedExercise_id] bigint  NOT NULL
+    [id] int IDENTITY(1,1) NOT NULL
 );
 GO
 
@@ -172,7 +180,8 @@ CREATE TABLE [dbo].[LoggedExercises] (
     [note] nvarchar(max)  NULL,
     [id] bigint IDENTITY(1,1) NOT NULL,
     [LimitBreaker_id] int  NOT NULL,
-    [Routine_id] int  NOT NULL
+    [Routine_id] int  NOT NULL,
+    [ExerciseBase_id] int  NOT NULL
 );
 GO
 
@@ -672,18 +681,18 @@ ON [dbo].[LoggedExercises]
     ([Routine_id]);
 GO
 
--- Creating foreign key on [LoggedExercise_id] in table 'ExerciseBases'
-ALTER TABLE [dbo].[ExerciseBases]
+-- Creating foreign key on [ExerciseBase_id] in table 'LoggedExercises'
+ALTER TABLE [dbo].[LoggedExercises]
 ADD CONSTRAINT [FK_ExerciseLoggedExercise]
-    FOREIGN KEY ([LoggedExercise_id])
-    REFERENCES [dbo].[LoggedExercises]
+    FOREIGN KEY ([ExerciseBase_id])
+    REFERENCES [dbo].[ExerciseBases]
         ([id])
     ON DELETE NO ACTION ON UPDATE NO ACTION;
 
 -- Creating non-clustered index for FOREIGN KEY 'FK_ExerciseLoggedExercise'
 CREATE INDEX [IX_FK_ExerciseLoggedExercise]
-ON [dbo].[ExerciseBases]
-    ([LoggedExercise_id]);
+ON [dbo].[LoggedExercises]
+    ([ExerciseBase_id]);
 GO
 
 -- Creating foreign key on [ExerciseBase_id] in table 'MuscleGroups'

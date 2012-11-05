@@ -158,12 +158,6 @@ public partial class ExerciseBase
         set;
     }
 
-    public virtual Nullable<byte> picture
-    {
-        get;
-        set;
-    }
-
     public virtual bool enabled
     {
         get;
@@ -1860,12 +1854,6 @@ public partial class SuggestedExercise
     }
 
     public virtual bool time
-    {
-        get;
-        set;
-    }
-
-    public virtual byte picture
     {
         get;
         set;

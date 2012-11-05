@@ -2,7 +2,7 @@
 -- --------------------------------------------------
 -- Entity Designer DDL Script for SQL Server 2005, 2008, and Azure
 -- --------------------------------------------------
--- Date Created: 11/02/2012 13:54:26
+-- Date Created: 11/02/2012 14:31:55
 -- Generated from EDMX file: C:\Users\Lynart\Documents\Project LimitBreaker\App_Code\Layer2.edmx
 -- --------------------------------------------------
 
@@ -18,7 +18,7 @@ GO
 -- --------------------------------------------------
 
 IF OBJECT_ID(N'[dbo].[FK_LoggedExerciseSetAttributes]', 'F') IS NOT NULL
-    ALTER TABLE [dbo].[SetAttributes] DROP CONSTRAINT [FK_LoggedExerciseSetAttributes];
+    ALTER TABLE [dbo].[LoggedExercises] DROP CONSTRAINT [FK_LoggedExerciseSetAttributes];
 GO
 IF OBJECT_ID(N'[dbo].[FK_ScheduledExerciseExercise]', 'F') IS NOT NULL
     ALTER TABLE [dbo].[ScheduledExercises] DROP CONSTRAINT [FK_ScheduledExerciseExercise];
@@ -66,7 +66,7 @@ IF OBJECT_ID(N'[dbo].[FK_LoggedExerciseRoutine]', 'F') IS NOT NULL
     ALTER TABLE [dbo].[LoggedExercises] DROP CONSTRAINT [FK_LoggedExerciseRoutine];
 GO
 IF OBJECT_ID(N'[dbo].[FK_ExerciseLoggedExercise]', 'F') IS NOT NULL
-    ALTER TABLE [dbo].[ExerciseBases] DROP CONSTRAINT [FK_ExerciseLoggedExercise];
+    ALTER TABLE [dbo].[LoggedExercises] DROP CONSTRAINT [FK_ExerciseLoggedExercise];
 GO
 IF OBJECT_ID(N'[dbo].[FK_MuscleGroupExercise]', 'F') IS NOT NULL
     ALTER TABLE [dbo].[MuscleGroups] DROP CONSTRAINT [FK_MuscleGroupExercise];
@@ -165,7 +165,7 @@ GO
 -- Creating table 'ScheduledExercises'
 CREATE TABLE [dbo].[ScheduledExercises] (
     [startTime] datetime  NOT NULL,
-    [NeedEmailNotification] nvarchar(max)  NOT NULL,
+    [NeedEmailNotification] bit  NOT NULL,
     [id] int IDENTITY(1,1) NOT NULL,
     [ExerciseBase_id] int  NOT NULL,
     [ScheduledReminders_id] int  NOT NULL,
@@ -179,8 +179,9 @@ CREATE TABLE [dbo].[LoggedExercises] (
     [timeLogged] datetime  NOT NULL,
     [note] nvarchar(max)  NULL,
     [id] bigint IDENTITY(1,1) NOT NULL,
+    [SetAttribute_id] int  NOT NULL,
     [LimitBreaker_id] int  NOT NULL,
-    [Routine_id] int  NOT NULL,
+    [Routine_id] int  NULL,
     [ExerciseBase_id] int  NOT NULL
 );
 GO
@@ -190,17 +191,16 @@ CREATE TABLE [dbo].[SetAttributes] (
     [id] int IDENTITY(1,1) NOT NULL,
     [weight] float  NULL,
     [distance] float  NULL,
-    [time] smallint  NULL,
-    [reps] smallint  NULL,
-    [LoggedExercise_id] bigint  NOT NULL
+    [time] bigint  NULL,
+    [reps] smallint  NULL
 );
 GO
 
 -- Creating table 'ExerciseGoals'
 CREATE TABLE [dbo].[ExerciseGoals] (
     [id] int IDENTITY(1,1) NOT NULL,
-    [Routine_id] int  NOT NULL,
-    [SetAttribute_id] int  NOT NULL
+    [SetAttribute_id] int  NOT NULL,
+    [Routine_id] int  NOT NULL
 );
 GO
 
@@ -216,7 +216,7 @@ GO
 -- Creating table 'ScheduledRoutines'
 CREATE TABLE [dbo].[ScheduledRoutines] (
     [id] int IDENTITY(1,1) NOT NULL,
-    [NeedEmailNotification] nvarchar(max)  NOT NULL,
+    [NeedEmailNotification] bit  NOT NULL,
     [startTime] datetime  NOT NULL,
     [Routine_id] int  NOT NULL,
     [ScheduledReminders_id] int  NOT NULL,
@@ -255,8 +255,7 @@ CREATE TABLE [dbo].[Suggestions] (
     [id] int IDENTITY(1,1) NOT NULL,
     [reason] nvarchar(max)  NOT NULL,
     [status] nvarchar(max)  NOT NULL,
-    [expiryDate] nvarchar(max)  NOT NULL,
-    [needuser] nvarchar(max)  NOT NULL,
+    [expiryDate] datetime  NOT NULL,
     [SuggestedExercises_id] int  NOT NULL,
     [LimitBreakers_id] int  NOT NULL
 );
@@ -268,10 +267,10 @@ CREATE TABLE [dbo].[SuggestedExercises] (
     [name] nvarchar(max)  NOT NULL,
     [equipment] nvarchar(max)  NOT NULL,
     [videoLink] nvarchar(max)  NOT NULL,
-    [rep] int  NOT NULL,
-    [wieght] float  NOT NULL,
-    [distance] int  NOT NULL,
-    [time] int  NOT NULL,
+    [rep] bit  NOT NULL,
+    [wieght] bit  NOT NULL,
+    [distance] bit  NOT NULL,
+    [time] bit  NOT NULL,
     [picture] tinyint  NOT NULL
 );
 GO
@@ -281,7 +280,6 @@ CREATE TABLE [dbo].[LimitBreakers] (
     [id] int IDENTITY(1,1) NOT NULL,
     [name] nvarchar(max)  NOT NULL,
     [username] nvarchar(max)  NOT NULL,
-    [password] nvarchar(max)  NOT NULL,
     [gender] nvarchar(max)  NOT NULL,
     [dateOfBirth] datetime  NOT NULL,
     [verified] bit  NOT NULL,
@@ -289,13 +287,13 @@ CREATE TABLE [dbo].[LimitBreakers] (
     [role] nvarchar(max)  NOT NULL,
     [status] nvarchar(max)  NOT NULL,
     [lastTimeSuggestionMade] datetime  NOT NULL,
-    [Statistics_Id] int  NOT NULL
+    [Statistics_id] int  NOT NULL
 );
 GO
 
 -- Creating table 'Statistics'
 CREATE TABLE [dbo].[Statistics] (
-    [Id] int IDENTITY(1,1) NOT NULL,
+    [id] int IDENTITY(1,1) NOT NULL,
     [level] int  NOT NULL,
     [experience] float  NOT NULL,
     [weight] float  NOT NULL,
@@ -332,11 +330,11 @@ GO
 
 -- Creating table 'ExerciseBases_Exercise'
 CREATE TABLE [dbo].[ExerciseBases_Exercise] (
-    [baseExperiecne] nvarchar(max)  NOT NULL,
-    [weightModifier] nvarchar(max)  NOT NULL,
-    [heightModifier] nvarchar(max)  NOT NULL,
-    [distanceModifier] nvarchar(max)  NOT NULL,
-    [timeModifier] nvarchar(max)  NOT NULL,
+    [baseExperiecne] float  NOT NULL,
+    [weightModifier] float  NOT NULL,
+    [heightModifier] float  NOT NULL,
+    [distanceModifier] float  NOT NULL,
+    [timeModifier] float  NOT NULL,
     [id] int  NOT NULL
 );
 GO
@@ -423,10 +421,10 @@ ADD CONSTRAINT [PK_LimitBreakers]
     PRIMARY KEY CLUSTERED ([id] ASC);
 GO
 
--- Creating primary key on [Id] in table 'Statistics'
+-- Creating primary key on [id] in table 'Statistics'
 ALTER TABLE [dbo].[Statistics]
 ADD CONSTRAINT [PK_Statistics]
-    PRIMARY KEY CLUSTERED ([Id] ASC);
+    PRIMARY KEY CLUSTERED ([id] ASC);
 GO
 
 -- Creating primary key on [id] in table 'MuscleGroups'
@@ -457,18 +455,18 @@ GO
 -- Creating all FOREIGN KEY constraints
 -- --------------------------------------------------
 
--- Creating foreign key on [LoggedExercise_id] in table 'SetAttributes'
-ALTER TABLE [dbo].[SetAttributes]
+-- Creating foreign key on [SetAttribute_id] in table 'LoggedExercises'
+ALTER TABLE [dbo].[LoggedExercises]
 ADD CONSTRAINT [FK_LoggedExerciseSetAttributes]
-    FOREIGN KEY ([LoggedExercise_id])
-    REFERENCES [dbo].[LoggedExercises]
+    FOREIGN KEY ([SetAttribute_id])
+    REFERENCES [dbo].[SetAttributes]
         ([id])
     ON DELETE NO ACTION ON UPDATE NO ACTION;
 
 -- Creating non-clustered index for FOREIGN KEY 'FK_LoggedExerciseSetAttributes'
 CREATE INDEX [IX_FK_LoggedExerciseSetAttributes]
-ON [dbo].[SetAttributes]
-    ([LoggedExercise_id]);
+ON [dbo].[LoggedExercises]
+    ([SetAttribute_id]);
 GO
 
 -- Creating foreign key on [ExerciseBase_id] in table 'ScheduledExercises'
@@ -597,18 +595,18 @@ ON [dbo].[Notifications_EmailNotification]
     ([LimitBreaker_id]);
 GO
 
--- Creating foreign key on [Statistics_Id] in table 'LimitBreakers'
+-- Creating foreign key on [Statistics_id] in table 'LimitBreakers'
 ALTER TABLE [dbo].[LimitBreakers]
 ADD CONSTRAINT [FK_LimitBreakerStatistics]
-    FOREIGN KEY ([Statistics_Id])
+    FOREIGN KEY ([Statistics_id])
     REFERENCES [dbo].[Statistics]
-        ([Id])
+        ([id])
     ON DELETE NO ACTION ON UPDATE NO ACTION;
 
 -- Creating non-clustered index for FOREIGN KEY 'FK_LimitBreakerStatistics'
 CREATE INDEX [IX_FK_LimitBreakerStatistics]
 ON [dbo].[LimitBreakers]
-    ([Statistics_Id]);
+    ([Statistics_id]);
 GO
 
 -- Creating foreign key on [LimitBreakers_id] in table 'Suggestions'

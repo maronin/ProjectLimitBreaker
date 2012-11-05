@@ -2,7 +2,7 @@
 -- --------------------------------------------------
 -- Entity Designer DDL Script for SQL Server 2005, 2008, and Azure
 -- --------------------------------------------------
--- Date Created: 11/02/2012 14:31:55
+-- Date Created: 11/05/2012 13:47:53
 -- Generated from EDMX file: C:\Users\Lynart\Documents\Project LimitBreaker\App_Code\Layer2.edmx
 -- --------------------------------------------------
 
@@ -150,13 +150,12 @@ GO
 -- Creating table 'ExerciseBases'
 CREATE TABLE [dbo].[ExerciseBases] (
     [name] nvarchar(max)  NOT NULL,
-    [equipment] nvarchar(max)  NOT NULL,
+    [equipment] nvarchar(max)  NULL,
     [videoLink] nvarchar(max)  NULL,
     [rep] bit  NOT NULL,
     [weight] bit  NOT NULL,
     [distance] bit  NOT NULL,
     [time] bit  NOT NULL,
-    [picture] tinyint  NULL,
     [enabled] bit  NOT NULL,
     [id] int IDENTITY(1,1) NOT NULL
 );
@@ -265,13 +264,12 @@ GO
 CREATE TABLE [dbo].[SuggestedExercises] (
     [id] int IDENTITY(1,1) NOT NULL,
     [name] nvarchar(max)  NOT NULL,
-    [equipment] nvarchar(max)  NOT NULL,
-    [videoLink] nvarchar(max)  NOT NULL,
+    [equipment] nvarchar(max)  NULL,
+    [videoLink] nvarchar(max)  NULL,
     [rep] bit  NOT NULL,
     [wieght] bit  NOT NULL,
     [distance] bit  NOT NULL,
-    [time] bit  NOT NULL,
-    [picture] tinyint  NOT NULL
+    [time] bit  NOT NULL
 );
 GO
 

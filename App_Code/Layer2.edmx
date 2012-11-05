@@ -118,13 +118,12 @@
       <PropertyRef Name="id" />
     </Key>
     <Property Name="name" Type="nvarchar(max)" Nullable="false" />
-    <Property Name="equipment" Type="nvarchar(max)" Nullable="false" />
+    <Property Name="equipment" Type="nvarchar(max)" Nullable="true" />
     <Property Name="videoLink" Type="nvarchar(max)" Nullable="true" />
     <Property Name="rep" Type="bit" Nullable="false" />
     <Property Name="weight" Type="bit" Nullable="false" />
     <Property Name="distance" Type="bit" Nullable="false" />
     <Property Name="time" Type="bit" Nullable="false" />
-    <Property Name="picture" Type="tinyint" Nullable="true" />
     <Property Name="enabled" Type="bit" Nullable="false" />
     <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
   </EntityType>
@@ -233,13 +232,12 @@
     </Key>
     <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
     <Property Name="name" Type="nvarchar(max)" Nullable="false" />
-    <Property Name="equipment" Type="nvarchar(max)" Nullable="false" />
-    <Property Name="videoLink" Type="nvarchar(max)" Nullable="false" />
+    <Property Name="equipment" Type="nvarchar(max)" Nullable="true" />
+    <Property Name="videoLink" Type="nvarchar(max)" Nullable="true" />
     <Property Name="rep" Type="bit" Nullable="false" />
     <Property Name="wieght" Type="bit" Nullable="false" />
     <Property Name="distance" Type="bit" Nullable="false" />
     <Property Name="time" Type="bit" Nullable="false" />
-    <Property Name="picture" Type="tinyint" Nullable="false" />
   </EntityType>
   <EntityType Name="LimitBreakers">
     <Key>

@@ -12,7 +12,7 @@
     <asp:ScriptManager ID="ScriptManager1" runat="server">
     </asp:ScriptManager>    
     <Juice:Accordion ID="Accordion1" runat="server">
-        <Juice:AccordionPanel Title="Section 1">
+        <Juice:AccordionPanel Title="Section 1" ID="acc">
             <PanelContent>
                 <p>
                     Mauris mauris ante, blandit et, ultrices a, suscipit eget, quam. Integer ut neque. Vivamus nisi metus, molestie vel, gravida in, condimentum sit  amet, nunc. Nam a nibh. Donec suscipit eros. Nam mi. Proin viverra leo ut odio. Curabitur malesuada. Vestibulum a velit eu ante scelerisque vulputate.
@@ -39,7 +39,6 @@
             </PanelContent>
         </Juice:AccordionPanel>
     </Juice:Accordion>
-    
     </div>
     </form>
 </body>

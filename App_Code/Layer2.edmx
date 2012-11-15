@@ -298,7 +298,7 @@
     </Key>
     <Property Name="baseExperiecne" Type="float" Nullable="false" />
     <Property Name="weightModifier" Type="float" Nullable="false" />
-    <Property Name="heightModifier" Type="float" Nullable="false" />
+    <Property Name="repModifier" Type="float" Nullable="false" />
     <Property Name="distanceModifier" Type="float" Nullable="false" />
     <Property Name="timeModifier" Type="float" Nullable="false" />
     <Property Name="id" Type="int" Nullable="false" />
@@ -962,7 +962,7 @@
           <ScalarProperty Name="id" ColumnName="id" />
           <ScalarProperty Name="baseExperiecne" ColumnName="baseExperiecne" />
           <ScalarProperty Name="weightModifier" ColumnName="weightModifier" />
-          <ScalarProperty Name="repModifier" ColumnName="heightModifier" />
+          <ScalarProperty Name="repModifier" ColumnName="repModifier" />
           <ScalarProperty Name="distanceModifier" ColumnName="distanceModifier" />
           <ScalarProperty Name="timeModifier" ColumnName="timeModifier" />
         </MappingFragment>

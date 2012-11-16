@@ -11,4 +11,20 @@ public partial class deleteExercise : System.Web.UI.Page
     {
 
     }
+    protected void Button1_Click(object sender, EventArgs e)
+    {
+        ExerciseManager deleter = new ExerciseManager();
+
+        bool result = deleter.deleteExerciseById(Convert.ToInt32(DropDownList1.SelectedItem.Value));
+
+        if (result)
+        {
+            Label1.Text = "it worked";
+        }
+
+        else
+        {
+            Label1.Text = "it did not work";
+        }
+    }
 }

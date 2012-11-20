@@ -12,7 +12,7 @@
 <body>
     <form id="form1" runat="server">
    <div id="main">
-      
+   <!-- These buttons will be replaced with Juice UI when we have the time for making our website more pretty-->   
    <h1>Project LimitBreaker</h1>
   
    <div id="menu">

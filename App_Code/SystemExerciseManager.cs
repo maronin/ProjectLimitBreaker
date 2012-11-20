@@ -49,13 +49,27 @@ public class SystemExerciseManager
             return rc;
         }
     }
-    /*
+    
     public List<ExerciseBase> getExercisesByName(string exerciseName)
     {
         using (var context = new Layer2Container())
         {
-            con
+            //context.ContextOptions.LazyLoadingEnabled = false;
+            var query = from exercise in context.ExerciseBases
+                        where exercise.name == exerciseName & exercise.enabled
+                        select new ExerciseBase
+                        {
+                            name = exercise.name,
+                            equipment = exercise.equipment,
+                            MuscleGroups = exercise.MuscleGroups,
+                            videoLink = exercise.videoLink,
+                            weight = exercise.weight,
+                            distance = exercise.distance,
+                            time = exercise.time
+                        };
+            
+            //context.LoadProperty(query, "MuscleGroups");
+            return query.ToList();
         }
     }
-     */
 }

@@ -9,7 +9,9 @@ public partial class deleteExercise : System.Web.UI.Page
 {
     protected void Page_Load(object sender, EventArgs e)
     {
-
+        if (DropDownList1.Items.Count < 1) {
+            Label1.Text = "Nothing in here to see";
+        }
     }
     protected void Button1_Click(object sender, EventArgs e)
     {

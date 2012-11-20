@@ -11,6 +11,6 @@ public partial class _Default : System.Web.UI.Page
 
     protected void Page_Load(object sender, EventArgs e)
     {
-        Autocomplete1.SourceList = manager.getExerciseNamesAC();
+        exerciseAutoComplete.SourceList = manager.getExerciseNamesAC();
     }
 }

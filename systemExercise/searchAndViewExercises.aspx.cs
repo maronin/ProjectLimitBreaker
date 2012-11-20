@@ -13,9 +13,8 @@ public partial class _Default : System.Web.UI.Page
     {
         exerciseAutoComplete.SourceList = manager.getExerciseNamesAC();
     }
-
-    protected void exerciseSearchButton_Click()
+    protected void exerciseSearchButton_Click(object sender, EventArgs e)
     {
-        Console.WriteLine("LOLOLOLOLOL");
+        List <ExerciseBase> foundExercises= manager.getExercisesByName(exerciseSearchBox.Text.Trim());
     }
 }

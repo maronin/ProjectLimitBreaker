@@ -1,13 +1,10 @@
-﻿<%@ Page Language="C#" AutoEventWireup="true" CodeFile="deleteExercise.aspx.cs" Inherits="deleteExercise" %>
+﻿<%@ Page Title="" Language="C#" MasterPageFile="~/ui/mp/MasterPage.master" AutoEventWireup="true" CodeFile="deleteexercisemp.aspx.cs" Inherits="systemExercise_deleteexercisemp" %>
 
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<asp:Content ID="Content1" ContentPlaceHolderID="head" Runat="Server">
+</asp:Content>
+<asp:Content ID="Content2" ContentPlaceHolderID="ContentPlaceHolder1" Runat="Server">
 
-<html xmlns="http://www.w3.org/1999/xhtml">
-<head runat="server">
-    <title></title>
-</head>
-<body>
-    <form id="form1" runat="server">
+
     <div>
         <asp:ObjectDataSource ID="ObjectDataSource2" runat="server" 
             SelectMethod="getExercises" TypeName="ExerciseManager"></asp:ObjectDataSource>
@@ -44,6 +41,5 @@
     </asp:GridView>
     </div>
 
-    </form>
-</body>
-</html>
+</asp:Content>
+

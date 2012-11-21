@@ -5,11 +5,12 @@ using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
 
-public partial class deleteExercise : System.Web.UI.Page
+public partial class systemExercise_deleteexercisemp : System.Web.UI.Page
 {
     protected void Page_Load(object sender, EventArgs e)
     {
-        if (DropDownList1.Items.Count < 1) {
+        if (DropDownList1.Items.Count < 1)
+        {
             Label1.Text = "Nothing in here to see";
         }
     }

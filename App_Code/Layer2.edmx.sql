@@ -2,7 +2,7 @@
 -- --------------------------------------------------
 -- Entity Designer DDL Script for SQL Server 2005, 2008, and Azure
 -- --------------------------------------------------
--- Date Created: 11/24/2012 17:01:59
+-- Date Created: 11/24/2012 17:07:56
 -- Generated from EDMX file: C:\Users\Lienhart\Documents\Repos\Project-LimitBreaker\App_Code\Layer2.edmx
 -- --------------------------------------------------
 
@@ -22,9 +22,6 @@ IF OBJECT_ID(N'[dbo].[FK_LoggedExerciseSetAttributes]', 'F') IS NOT NULL
 GO
 IF OBJECT_ID(N'[dbo].[FK_ScheduledExerciseExercise]', 'F') IS NOT NULL
     ALTER TABLE [dbo].[ScheduledExercises] DROP CONSTRAINT [FK_ScheduledExerciseExercise];
-GO
-IF OBJECT_ID(N'[dbo].[FK_ExerciseGoalSetAttributes]', 'F') IS NOT NULL
-    ALTER TABLE [dbo].[ExerciseGoals] DROP CONSTRAINT [FK_ExerciseGoalSetAttributes];
 GO
 IF OBJECT_ID(N'[dbo].[FK_RoutineExerciseGoal]', 'F') IS NOT NULL
     ALTER TABLE [dbo].[ExerciseGoals] DROP CONSTRAINT [FK_RoutineExerciseGoal];
@@ -65,8 +62,11 @@ GO
 IF OBJECT_ID(N'[dbo].[FK_ExerciseGoalExerciseBase]', 'F') IS NOT NULL
     ALTER TABLE [dbo].[ExerciseGoals] DROP CONSTRAINT [FK_ExerciseGoalExerciseBase];
 GO
-IF OBJECT_ID(N'[dbo].[FK_ExerciseExpExercise]', 'F') IS NOT NULL
-    ALTER TABLE [dbo].[ExerciseExps] DROP CONSTRAINT [FK_ExerciseExpExercise];
+IF OBJECT_ID(N'[dbo].[FK_ExerciseExerciseExp]', 'F') IS NOT NULL
+    ALTER TABLE [dbo].[ExerciseExps] DROP CONSTRAINT [FK_ExerciseExerciseExp];
+GO
+IF OBJECT_ID(N'[dbo].[FK_SetAttributesExerciseGoal]', 'F') IS NOT NULL
+    ALTER TABLE [dbo].[ExerciseGoals] DROP CONSTRAINT [FK_SetAttributesExerciseGoal];
 GO
 IF OBJECT_ID(N'[dbo].[FK_ScheduledReminder_inherits_Notification]', 'F') IS NOT NULL
     ALTER TABLE [dbo].[Notifications_ScheduledReminder] DROP CONSTRAINT [FK_ScheduledReminder_inherits_Notification];
@@ -264,7 +264,7 @@ GO
 
 -- Creating table 'ExerciseExps'
 CREATE TABLE [dbo].[ExerciseExps] (
-    [baseExperiecne] float  NOT NULL,
+    [baseExperience] float  NOT NULL,
     [weightModifier] float  NOT NULL,
     [repModifier] float  NOT NULL,
     [distanceModifier] float  NOT NULL,

@@ -288,7 +288,7 @@ public partial class ExerciseExp
 {
     #region Primitive Properties
 
-    public virtual double baseExperiecne
+    public virtual double baseExperience
     {
         get;
         set;

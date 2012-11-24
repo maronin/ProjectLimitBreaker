@@ -235,7 +235,7 @@
     <Key>
       <PropertyRef Name="id" />
     </Key>
-    <Property Name="baseExperiecne" Type="float" Nullable="false" />
+    <Property Name="baseExperience" Type="float" Nullable="false" />
     <Property Name="weightModifier" Type="float" Nullable="false" />
     <Property Name="repModifier" Type="float" Nullable="false" />
     <Property Name="distanceModifier" Type="float" Nullable="false" />
@@ -679,7 +679,7 @@
           <Key>
             <PropertyRef Name="id" />
           </Key>
-          <Property Type="Double" Name="baseExperiecne" Nullable="false" />
+          <Property Type="Double" Name="baseExperience" Nullable="false" />
           <Property Type="Double" Name="weightModifier" Nullable="false" />
           <Property Type="Double" Name="repModifier" Nullable="false" />
           <Property Type="Double" Name="distanceModifier" Nullable="false" />
@@ -961,7 +961,7 @@
       <EntityTypeMapping TypeName="IsTypeOf(Layer2.ExerciseExp)">
         <MappingFragment StoreEntitySet="ExerciseExps">
           <ScalarProperty Name="id" ColumnName="id" />
-          <ScalarProperty Name="baseExperiecne" ColumnName="baseExperiecne" />
+          <ScalarProperty Name="baseExperience" ColumnName="baseExperience" />
           <ScalarProperty Name="weightModifier" ColumnName="weightModifier" />
           <ScalarProperty Name="repModifier" ColumnName="repModifier" />
           <ScalarProperty Name="distanceModifier" ColumnName="distanceModifier" />

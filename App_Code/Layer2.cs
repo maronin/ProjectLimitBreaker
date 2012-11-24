@@ -170,6 +170,12 @@ public partial class ExerciseBase
         set;
     }
 
+    public virtual string muscleGroups
+    {
+        get;
+        set;
+    }
+
     #endregion
     #region Navigation Properties
 
@@ -237,38 +243,6 @@ public partial class ExerciseBase
     }
     private ICollection<LoggedExercise> _loggedExercise;
 
-    public virtual ICollection<MuscleGroup> MuscleGroups
-    {
-        get
-        {
-            if (_muscleGroups == null)
-            {
-                var newCollection = new FixupCollection<MuscleGroup>();
-                newCollection.CollectionChanged += FixupMuscleGroups;
-                _muscleGroups = newCollection;
-            }
-            return _muscleGroups;
-        }
-        set
-        {
-            if (!ReferenceEquals(_muscleGroups, value))
-            {
-                var previousValue = _muscleGroups as FixupCollection<MuscleGroup>;
-                if (previousValue != null)
-                {
-                    previousValue.CollectionChanged -= FixupMuscleGroups;
-                }
-                _muscleGroups = value;
-                var newValue = value as FixupCollection<MuscleGroup>;
-                if (newValue != null)
-                {
-                    newValue.CollectionChanged += FixupMuscleGroups;
-                }
-            }
-        }
-    }
-    private ICollection<MuscleGroup> _muscleGroups;
-
     #endregion
     #region Association Fixup
 
@@ -307,28 +281,6 @@ public partial class ExerciseBase
         if (e.OldItems != null)
         {
             foreach (LoggedExercise item in e.OldItems)
-            {
-                if (ReferenceEquals(item.ExerciseBase, this))
-                {
-                    item.ExerciseBase = null;
-                }
-            }
-        }
-    }
-
-    private void FixupMuscleGroups(object sender, NotifyCollectionChangedEventArgs e)
-    {
-        if (e.NewItems != null)
-        {
-            foreach (MuscleGroup item in e.NewItems)
-            {
-                item.ExerciseBase = this;
-            }
-        }
-
-        if (e.OldItems != null)
-        {
-            foreach (MuscleGroup item in e.OldItems)
             {
                 if (ReferenceEquals(item.ExerciseBase, this))
                 {
@@ -606,38 +558,6 @@ public partial class LimitBreaker
     }
     private Statistics _statistics;
 
-    public virtual ICollection<Suggestion> Suggestion
-    {
-        get
-        {
-            if (_suggestion == null)
-            {
-                var newCollection = new FixupCollection<Suggestion>();
-                newCollection.CollectionChanged += FixupSuggestion;
-                _suggestion = newCollection;
-            }
-            return _suggestion;
-        }
-        set
-        {
-            if (!ReferenceEquals(_suggestion, value))
-            {
-                var previousValue = _suggestion as FixupCollection<Suggestion>;
-                if (previousValue != null)
-                {
-                    previousValue.CollectionChanged -= FixupSuggestion;
-                }
-                _suggestion = value;
-                var newValue = value as FixupCollection<Suggestion>;
-                if (newValue != null)
-                {
-                    newValue.CollectionChanged += FixupSuggestion;
-                }
-            }
-        }
-    }
-    private ICollection<Suggestion> _suggestion;
-
     public virtual ICollection<Routine> Routines
     {
         get
@@ -776,28 +696,6 @@ public partial class LimitBreaker
         if (e.OldItems != null)
         {
             foreach (ScheduledExercise item in e.OldItems)
-            {
-                if (ReferenceEquals(item.LimitBreakers, this))
-                {
-                    item.LimitBreakers = null;
-                }
-            }
-        }
-    }
-
-    private void FixupSuggestion(object sender, NotifyCollectionChangedEventArgs e)
-    {
-        if (e.NewItems != null)
-        {
-            foreach (Suggestion item in e.NewItems)
-            {
-                item.LimitBreakers = this;
-            }
-        }
-
-        if (e.OldItems != null)
-        {
-            foreach (Suggestion item in e.OldItems)
             {
                 if (ReferenceEquals(item.LimitBreakers, this))
                 {
@@ -1052,92 +950,6 @@ public partial class LoggedExercise
                 {
                     item.LoggedExercise = null;
                 }
-            }
-        }
-    }
-
-    #endregion
-}
-public partial class MuscleGroup
-{
-    #region Primitive Properties
-
-    public virtual short id
-    {
-        get;
-        set;
-    }
-
-    public virtual string name
-    {
-        get;
-        set;
-    }
-
-    #endregion
-    #region Navigation Properties
-
-    public virtual ExerciseBase ExerciseBase
-    {
-        get { return _exerciseBase; }
-        set
-        {
-            if (!ReferenceEquals(_exerciseBase, value))
-            {
-                var previousValue = _exerciseBase;
-                _exerciseBase = value;
-                FixupExerciseBase(previousValue);
-            }
-        }
-    }
-    private ExerciseBase _exerciseBase;
-
-    public virtual SuggestedExercise SuggestedExercise
-    {
-        get { return _suggestedExercise; }
-        set
-        {
-            if (!ReferenceEquals(_suggestedExercise, value))
-            {
-                var previousValue = _suggestedExercise;
-                _suggestedExercise = value;
-                FixupSuggestedExercise(previousValue);
-            }
-        }
-    }
-    private SuggestedExercise _suggestedExercise;
-
-    #endregion
-    #region Association Fixup
-
-    private void FixupExerciseBase(ExerciseBase previousValue)
-    {
-        if (previousValue != null && previousValue.MuscleGroups.Contains(this))
-        {
-            previousValue.MuscleGroups.Remove(this);
-        }
-
-        if (ExerciseBase != null)
-        {
-            if (!ExerciseBase.MuscleGroups.Contains(this))
-            {
-                ExerciseBase.MuscleGroups.Add(this);
-            }
-        }
-    }
-
-    private void FixupSuggestedExercise(SuggestedExercise previousValue)
-    {
-        if (previousValue != null && previousValue.MuscleGroups.Contains(this))
-        {
-            previousValue.MuscleGroups.Remove(this);
-        }
-
-        if (SuggestedExercise != null)
-        {
-            if (!SuggestedExercise.MuscleGroups.Contains(this))
-            {
-                SuggestedExercise.MuscleGroups.Add(this);
             }
         }
     }
@@ -1895,243 +1707,6 @@ public partial class Statistics
         if (LimitBreaker != null)
         {
             LimitBreaker.Statistics = this;
-        }
-    }
-
-    #endregion
-}
-public partial class SuggestedExercise
-{
-    #region Primitive Properties
-
-    public virtual int id
-    {
-        get;
-        set;
-    }
-
-    public virtual string name
-    {
-        get;
-        set;
-    }
-
-    public virtual string equipment
-    {
-        get;
-        set;
-    }
-
-    public virtual string videoLink
-    {
-        get;
-        set;
-    }
-
-    public virtual bool rep
-    {
-        get;
-        set;
-    }
-
-    public virtual bool wieght
-    {
-        get;
-        set;
-    }
-
-    public virtual bool distance
-    {
-        get;
-        set;
-    }
-
-    public virtual bool time
-    {
-        get;
-        set;
-    }
-
-    #endregion
-    #region Navigation Properties
-
-    public virtual Suggestion Suggestion
-    {
-        get { return _suggestion; }
-        set
-        {
-            if (!ReferenceEquals(_suggestion, value))
-            {
-                var previousValue = _suggestion;
-                _suggestion = value;
-                FixupSuggestion(previousValue);
-            }
-        }
-    }
-    private Suggestion _suggestion;
-
-    public virtual ICollection<MuscleGroup> MuscleGroups
-    {
-        get
-        {
-            if (_muscleGroups == null)
-            {
-                var newCollection = new FixupCollection<MuscleGroup>();
-                newCollection.CollectionChanged += FixupMuscleGroups;
-                _muscleGroups = newCollection;
-            }
-            return _muscleGroups;
-        }
-        set
-        {
-            if (!ReferenceEquals(_muscleGroups, value))
-            {
-                var previousValue = _muscleGroups as FixupCollection<MuscleGroup>;
-                if (previousValue != null)
-                {
-                    previousValue.CollectionChanged -= FixupMuscleGroups;
-                }
-                _muscleGroups = value;
-                var newValue = value as FixupCollection<MuscleGroup>;
-                if (newValue != null)
-                {
-                    newValue.CollectionChanged += FixupMuscleGroups;
-                }
-            }
-        }
-    }
-    private ICollection<MuscleGroup> _muscleGroups;
-
-    #endregion
-    #region Association Fixup
-
-    private void FixupSuggestion(Suggestion previousValue)
-    {
-        if (previousValue != null && ReferenceEquals(previousValue.SuggestedExercises, this))
-        {
-            previousValue.SuggestedExercises = null;
-        }
-
-        if (Suggestion != null)
-        {
-            Suggestion.SuggestedExercises = this;
-        }
-    }
-
-    private void FixupMuscleGroups(object sender, NotifyCollectionChangedEventArgs e)
-    {
-        if (e.NewItems != null)
-        {
-            foreach (MuscleGroup item in e.NewItems)
-            {
-                item.SuggestedExercise = this;
-            }
-        }
-
-        if (e.OldItems != null)
-        {
-            foreach (MuscleGroup item in e.OldItems)
-            {
-                if (ReferenceEquals(item.SuggestedExercise, this))
-                {
-                    item.SuggestedExercise = null;
-                }
-            }
-        }
-    }
-
-    #endregion
-}
-public partial class Suggestion
-{
-    #region Primitive Properties
-
-    public virtual int id
-    {
-        get;
-        set;
-    }
-
-    public virtual string reason
-    {
-        get;
-        set;
-    }
-
-    public virtual string status
-    {
-        get;
-        set;
-    }
-
-    public virtual System.DateTime expiryDate
-    {
-        get;
-        set;
-    }
-
-    #endregion
-    #region Navigation Properties
-
-    public virtual SuggestedExercise SuggestedExercises
-    {
-        get { return _suggestedExercises; }
-        set
-        {
-            if (!ReferenceEquals(_suggestedExercises, value))
-            {
-                var previousValue = _suggestedExercises;
-                _suggestedExercises = value;
-                FixupSuggestedExercises(previousValue);
-            }
-        }
-    }
-    private SuggestedExercise _suggestedExercises;
-
-    public virtual LimitBreaker LimitBreakers
-    {
-        get { return _limitBreakers; }
-        set
-        {
-            if (!ReferenceEquals(_limitBreakers, value))
-            {
-                var previousValue = _limitBreakers;
-                _limitBreakers = value;
-                FixupLimitBreakers(previousValue);
-            }
-        }
-    }
-    private LimitBreaker _limitBreakers;
-
-    #endregion
-    #region Association Fixup
-
-    private void FixupSuggestedExercises(SuggestedExercise previousValue)
-    {
-        if (previousValue != null && ReferenceEquals(previousValue.Suggestion, this))
-        {
-            previousValue.Suggestion = null;
-        }
-
-        if (SuggestedExercises != null)
-        {
-            SuggestedExercises.Suggestion = this;
-        }
-    }
-
-    private void FixupLimitBreakers(LimitBreaker previousValue)
-    {
-        if (previousValue != null && previousValue.Suggestion.Contains(this))
-        {
-            previousValue.Suggestion.Remove(this);
-        }
-
-        if (LimitBreakers != null)
-        {
-            if (!LimitBreakers.Suggestion.Contains(this))
-            {
-                LimitBreakers.Suggestion.Add(this);
-            }
         }
     }
 

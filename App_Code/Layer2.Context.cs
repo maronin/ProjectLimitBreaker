@@ -100,18 +100,6 @@ public partial class Layer2Container : ObjectContext
     }
     private ObjectSet<Notification> _notifications;
 
-    public ObjectSet<Suggestion> Suggestions
-    {
-        get { return _suggestions  ?? (_suggestions = CreateObjectSet<Suggestion>("Suggestions")); }
-    }
-    private ObjectSet<Suggestion> _suggestions;
-
-    public ObjectSet<SuggestedExercise> SuggestedExercises
-    {
-        get { return _suggestedExercises  ?? (_suggestedExercises = CreateObjectSet<SuggestedExercise>("SuggestedExercises")); }
-    }
-    private ObjectSet<SuggestedExercise> _suggestedExercises;
-
     public ObjectSet<LimitBreaker> LimitBreakers
     {
         get { return _limitBreakers  ?? (_limitBreakers = CreateObjectSet<LimitBreaker>("LimitBreakers")); }
@@ -123,12 +111,6 @@ public partial class Layer2Container : ObjectContext
         get { return _statistics  ?? (_statistics = CreateObjectSet<Statistics>("Statistics")); }
     }
     private ObjectSet<Statistics> _statistics;
-
-    public ObjectSet<MuscleGroup> MuscleGroups
-    {
-        get { return _muscleGroups  ?? (_muscleGroups = CreateObjectSet<MuscleGroup>("MuscleGroups")); }
-    }
-    private ObjectSet<MuscleGroup> _muscleGroups;
 
     #endregion
 }

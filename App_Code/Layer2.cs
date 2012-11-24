@@ -76,43 +76,7 @@ public partial class EmailNotification : Notification
 
     #endregion
 }
-public partial class Exercise : ExerciseBase
-{
-    #region Primitive Properties
-
-    public virtual double baseExperiecne
-    {
-        get;
-        set;
-    }
-
-    public virtual double weightModifier
-    {
-        get;
-        set;
-    }
-
-    public virtual double repModifier
-    {
-        get;
-        set;
-    }
-
-    public virtual double distanceModifier
-    {
-        get;
-        set;
-    }
-
-    public virtual double timeModifier
-    {
-        get;
-        set;
-    }
-
-    #endregion
-}
-public partial class ExerciseBase
+public partial class Exercise
 {
     #region Primitive Properties
 
@@ -243,8 +207,36 @@ public partial class ExerciseBase
     }
     private ICollection<LoggedExercise> _loggedExercise;
 
+    public virtual ExerciseExp ExerciseExp
+    {
+        get { return _exerciseExp; }
+        set
+        {
+            if (!ReferenceEquals(_exerciseExp, value))
+            {
+                var previousValue = _exerciseExp;
+                _exerciseExp = value;
+                FixupExerciseExp(previousValue);
+            }
+        }
+    }
+    private ExerciseExp _exerciseExp;
+
     #endregion
     #region Association Fixup
+
+    private void FixupExerciseExp(ExerciseExp previousValue)
+    {
+        if (previousValue != null && ReferenceEquals(previousValue.Exercise, this))
+        {
+            previousValue.Exercise = null;
+        }
+
+        if (ExerciseExp != null)
+        {
+            ExerciseExp.Exercise = this;
+        }
+    }
 
     private void FixupScheduledExercises(object sender, NotifyCollectionChangedEventArgs e)
     {
@@ -287,6 +279,82 @@ public partial class ExerciseBase
                     item.ExerciseBase = null;
                 }
             }
+        }
+    }
+
+    #endregion
+}
+public partial class ExerciseExp
+{
+    #region Primitive Properties
+
+    public virtual double baseExperiecne
+    {
+        get;
+        set;
+    }
+
+    public virtual double weightModifier
+    {
+        get;
+        set;
+    }
+
+    public virtual double repModifier
+    {
+        get;
+        set;
+    }
+
+    public virtual double distanceModifier
+    {
+        get;
+        set;
+    }
+
+    public virtual double timeModifier
+    {
+        get;
+        set;
+    }
+
+    public virtual int id
+    {
+        get;
+        set;
+    }
+
+    #endregion
+    #region Navigation Properties
+
+    public virtual Exercise Exercise
+    {
+        get { return _exercise; }
+        set
+        {
+            if (!ReferenceEquals(_exercise, value))
+            {
+                var previousValue = _exercise;
+                _exercise = value;
+                FixupExercise(previousValue);
+            }
+        }
+    }
+    private Exercise _exercise;
+
+    #endregion
+    #region Association Fixup
+
+    private void FixupExercise(Exercise previousValue)
+    {
+        if (previousValue != null && ReferenceEquals(previousValue.ExerciseExp, this))
+        {
+            previousValue.ExerciseExp = null;
+        }
+
+        if (Exercise != null)
+        {
+            Exercise.ExerciseExp = this;
         }
     }
 
@@ -335,7 +403,7 @@ public partial class ExerciseGoal
     }
     private Routine _routine;
 
-    public virtual ExerciseBase ExerciseBase
+    public virtual Exercise ExerciseBase
     {
         get;
         set;
@@ -866,7 +934,7 @@ public partial class LoggedExercise
     }
     private Routine _routine;
 
-    public virtual ExerciseBase ExerciseBase
+    public virtual Exercise ExerciseBase
     {
         get { return _exerciseBase; }
         set
@@ -879,7 +947,7 @@ public partial class LoggedExercise
             }
         }
     }
-    private ExerciseBase _exerciseBase;
+    private Exercise _exerciseBase;
 
     #endregion
     #region Association Fixup
@@ -916,7 +984,7 @@ public partial class LoggedExercise
         }
     }
 
-    private void FixupExerciseBase(ExerciseBase previousValue)
+    private void FixupExerciseBase(Exercise previousValue)
     {
         if (previousValue != null && previousValue.LoggedExercise.Contains(this))
         {
@@ -1234,7 +1302,7 @@ public partial class ScheduledExercise
     #endregion
     #region Navigation Properties
 
-    public virtual ExerciseBase ExerciseBase
+    public virtual Exercise ExerciseBase
     {
         get { return _exerciseBase; }
         set
@@ -1247,7 +1315,7 @@ public partial class ScheduledExercise
             }
         }
     }
-    private ExerciseBase _exerciseBase;
+    private Exercise _exerciseBase;
 
     public virtual ScheduledReminder ScheduledReminders
     {
@@ -1282,7 +1350,7 @@ public partial class ScheduledExercise
     #endregion
     #region Association Fixup
 
-    private void FixupExerciseBase(ExerciseBase previousValue)
+    private void FixupExerciseBase(Exercise previousValue)
     {
         if (previousValue != null && previousValue.ScheduledExercises.Contains(this))
         {

@@ -2,7 +2,7 @@
 -- --------------------------------------------------
 -- Entity Designer DDL Script for SQL Server 2005, 2008, and Azure
 -- --------------------------------------------------
--- Date Created: 11/24/2012 16:43:13
+-- Date Created: 11/24/2012 16:54:34
 -- Generated from EDMX file: C:\Users\Lienhart\Documents\Repos\Project-LimitBreaker\App_Code\Layer2.edmx
 -- --------------------------------------------------
 
@@ -65,22 +65,22 @@ GO
 IF OBJECT_ID(N'[dbo].[FK_ExerciseGoalExerciseBase]', 'F') IS NOT NULL
     ALTER TABLE [dbo].[ExerciseGoals] DROP CONSTRAINT [FK_ExerciseGoalExerciseBase];
 GO
+IF OBJECT_ID(N'[dbo].[FK_ExerciseExpExercise]', 'F') IS NOT NULL
+    ALTER TABLE [dbo].[ExerciseExps] DROP CONSTRAINT [FK_ExerciseExpExercise];
+GO
 IF OBJECT_ID(N'[dbo].[FK_ScheduledReminder_inherits_Notification]', 'F') IS NOT NULL
     ALTER TABLE [dbo].[Notifications_ScheduledReminder] DROP CONSTRAINT [FK_ScheduledReminder_inherits_Notification];
 GO
 IF OBJECT_ID(N'[dbo].[FK_EmailNotification_inherits_Notification]', 'F') IS NOT NULL
     ALTER TABLE [dbo].[Notifications_EmailNotification] DROP CONSTRAINT [FK_EmailNotification_inherits_Notification];
 GO
-IF OBJECT_ID(N'[dbo].[FK_Exercise_inherits_ExerciseBase]', 'F') IS NOT NULL
-    ALTER TABLE [dbo].[ExerciseBases_Exercise] DROP CONSTRAINT [FK_Exercise_inherits_ExerciseBase];
-GO
 
 -- --------------------------------------------------
 -- Dropping existing tables
 -- --------------------------------------------------
 
-IF OBJECT_ID(N'[dbo].[ExerciseBases]', 'U') IS NOT NULL
-    DROP TABLE [dbo].[ExerciseBases];
+IF OBJECT_ID(N'[dbo].[Exercises]', 'U') IS NOT NULL
+    DROP TABLE [dbo].[Exercises];
 GO
 IF OBJECT_ID(N'[dbo].[ScheduledExercises]', 'U') IS NOT NULL
     DROP TABLE [dbo].[ScheduledExercises];
@@ -115,22 +115,22 @@ GO
 IF OBJECT_ID(N'[dbo].[Statistics]', 'U') IS NOT NULL
     DROP TABLE [dbo].[Statistics];
 GO
+IF OBJECT_ID(N'[dbo].[ExerciseExps]', 'U') IS NOT NULL
+    DROP TABLE [dbo].[ExerciseExps];
+GO
 IF OBJECT_ID(N'[dbo].[Notifications_ScheduledReminder]', 'U') IS NOT NULL
     DROP TABLE [dbo].[Notifications_ScheduledReminder];
 GO
 IF OBJECT_ID(N'[dbo].[Notifications_EmailNotification]', 'U') IS NOT NULL
     DROP TABLE [dbo].[Notifications_EmailNotification];
 GO
-IF OBJECT_ID(N'[dbo].[ExerciseBases_Exercise]', 'U') IS NOT NULL
-    DROP TABLE [dbo].[ExerciseBases_Exercise];
-GO
 
 -- --------------------------------------------------
 -- Creating all tables
 -- --------------------------------------------------
 
--- Creating table 'ExerciseBases'
-CREATE TABLE [dbo].[ExerciseBases] (
+-- Creating table 'Exercises'
+CREATE TABLE [dbo].[Exercises] (
     [name] nvarchar(max)  NOT NULL,
     [equipment] nvarchar(max)  NULL,
     [videoLink] nvarchar(max)  NULL,
@@ -262,6 +262,18 @@ CREATE TABLE [dbo].[Statistics] (
 );
 GO
 
+-- Creating table 'ExerciseExps'
+CREATE TABLE [dbo].[ExerciseExps] (
+    [baseExperiecne] float  NOT NULL,
+    [weightModifier] float  NOT NULL,
+    [repModifier] float  NOT NULL,
+    [distanceModifier] float  NOT NULL,
+    [timeModifier] float  NOT NULL,
+    [id] int IDENTITY(1,1) NOT NULL,
+    [Exercise_id] int  NOT NULL
+);
+GO
+
 -- Creating table 'Notifications_ScheduledReminder'
 CREATE TABLE [dbo].[Notifications_ScheduledReminder] (
     [message] nvarchar(max)  NOT NULL,
@@ -277,24 +289,13 @@ CREATE TABLE [dbo].[Notifications_EmailNotification] (
 );
 GO
 
--- Creating table 'ExerciseBases_Exercise'
-CREATE TABLE [dbo].[ExerciseBases_Exercise] (
-    [baseExperiecne] float  NOT NULL,
-    [weightModifier] float  NOT NULL,
-    [repModifier] float  NOT NULL,
-    [distanceModifier] float  NOT NULL,
-    [timeModifier] float  NOT NULL,
-    [id] int  NOT NULL
-);
-GO
-
 -- --------------------------------------------------
 -- Creating all PRIMARY KEY constraints
 -- --------------------------------------------------
 
--- Creating primary key on [id] in table 'ExerciseBases'
-ALTER TABLE [dbo].[ExerciseBases]
-ADD CONSTRAINT [PK_ExerciseBases]
+-- Creating primary key on [id] in table 'Exercises'
+ALTER TABLE [dbo].[Exercises]
+ADD CONSTRAINT [PK_Exercises]
     PRIMARY KEY CLUSTERED ([id] ASC);
 GO
 
@@ -364,6 +365,12 @@ ADD CONSTRAINT [PK_Statistics]
     PRIMARY KEY CLUSTERED ([id] ASC);
 GO
 
+-- Creating primary key on [id] in table 'ExerciseExps'
+ALTER TABLE [dbo].[ExerciseExps]
+ADD CONSTRAINT [PK_ExerciseExps]
+    PRIMARY KEY CLUSTERED ([id] ASC);
+GO
+
 -- Creating primary key on [id] in table 'Notifications_ScheduledReminder'
 ALTER TABLE [dbo].[Notifications_ScheduledReminder]
 ADD CONSTRAINT [PK_Notifications_ScheduledReminder]
@@ -373,12 +380,6 @@ GO
 -- Creating primary key on [id] in table 'Notifications_EmailNotification'
 ALTER TABLE [dbo].[Notifications_EmailNotification]
 ADD CONSTRAINT [PK_Notifications_EmailNotification]
-    PRIMARY KEY CLUSTERED ([id] ASC);
-GO
-
--- Creating primary key on [id] in table 'ExerciseBases_Exercise'
-ALTER TABLE [dbo].[ExerciseBases_Exercise]
-ADD CONSTRAINT [PK_ExerciseBases_Exercise]
     PRIMARY KEY CLUSTERED ([id] ASC);
 GO
 
@@ -404,7 +405,7 @@ GO
 ALTER TABLE [dbo].[ScheduledExercises]
 ADD CONSTRAINT [FK_ScheduledExerciseExercise]
     FOREIGN KEY ([ExerciseBase_id])
-    REFERENCES [dbo].[ExerciseBases]
+    REFERENCES [dbo].[Exercises]
         ([id])
     ON DELETE NO ACTION ON UPDATE NO ACTION;
 
@@ -586,7 +587,7 @@ GO
 ALTER TABLE [dbo].[LoggedExercises]
 ADD CONSTRAINT [FK_ExerciseLoggedExercise]
     FOREIGN KEY ([ExerciseBase_id])
-    REFERENCES [dbo].[ExerciseBases]
+    REFERENCES [dbo].[Exercises]
         ([id])
     ON DELETE NO ACTION ON UPDATE NO ACTION;
 
@@ -600,7 +601,7 @@ GO
 ALTER TABLE [dbo].[ExerciseGoals]
 ADD CONSTRAINT [FK_ExerciseGoalExerciseBase]
     FOREIGN KEY ([ExerciseBase_id])
-    REFERENCES [dbo].[ExerciseBases]
+    REFERENCES [dbo].[Exercises]
         ([id])
     ON DELETE NO ACTION ON UPDATE NO ACTION;
 
@@ -608,6 +609,20 @@ ADD CONSTRAINT [FK_ExerciseGoalExerciseBase]
 CREATE INDEX [IX_FK_ExerciseGoalExerciseBase]
 ON [dbo].[ExerciseGoals]
     ([ExerciseBase_id]);
+GO
+
+-- Creating foreign key on [Exercise_id] in table 'ExerciseExps'
+ALTER TABLE [dbo].[ExerciseExps]
+ADD CONSTRAINT [FK_ExerciseExpExercise]
+    FOREIGN KEY ([Exercise_id])
+    REFERENCES [dbo].[Exercises]
+        ([id])
+    ON DELETE NO ACTION ON UPDATE NO ACTION;
+
+-- Creating non-clustered index for FOREIGN KEY 'FK_ExerciseExpExercise'
+CREATE INDEX [IX_FK_ExerciseExpExercise]
+ON [dbo].[ExerciseExps]
+    ([Exercise_id]);
 GO
 
 -- Creating foreign key on [id] in table 'Notifications_ScheduledReminder'
@@ -624,15 +639,6 @@ ALTER TABLE [dbo].[Notifications_EmailNotification]
 ADD CONSTRAINT [FK_EmailNotification_inherits_Notification]
     FOREIGN KEY ([id])
     REFERENCES [dbo].[Notifications]
-        ([id])
-    ON DELETE NO ACTION ON UPDATE NO ACTION;
-GO
-
--- Creating foreign key on [id] in table 'ExerciseBases_Exercise'
-ALTER TABLE [dbo].[ExerciseBases_Exercise]
-ADD CONSTRAINT [FK_Exercise_inherits_ExerciseBase]
-    FOREIGN KEY ([id])
-    REFERENCES [dbo].[ExerciseBases]
         ([id])
     ON DELETE NO ACTION ON UPDATE NO ACTION;
 GO

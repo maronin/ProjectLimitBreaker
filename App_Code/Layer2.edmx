@@ -6,7 +6,7 @@
     <edmx:StorageModels>
     <Schema Namespace="Layer2.Store" Alias="Self" Provider="System.Data.SqlClient" ProviderManifestToken="2008" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns="http://schemas.microsoft.com/ado/2009/02/edm/ssdl">
   <EntityContainer Name="Layer2StoreContainer">
-    <EntitySet Name="ExerciseBases" EntityType="Layer2.Store.ExerciseBases" store:Type="Tables" Schema="dbo" />
+    <EntitySet Name="Exercises" EntityType="Layer2.Store.Exercises" store:Type="Tables" Schema="dbo" />
     <EntitySet Name="ScheduledExercises" EntityType="Layer2.Store.ScheduledExercises" store:Type="Tables" Schema="dbo" />
     <EntitySet Name="LoggedExercises" EntityType="Layer2.Store.LoggedExercises" store:Type="Tables" Schema="dbo" />
     <EntitySet Name="SetAttributes" EntityType="Layer2.Store.SetAttributes" store:Type="Tables" Schema="dbo" />
@@ -18,16 +18,16 @@
     <EntitySet Name="Notifications" EntityType="Layer2.Store.Notifications" store:Type="Tables" Schema="dbo" />
     <EntitySet Name="LimitBreakers" EntityType="Layer2.Store.LimitBreakers" store:Type="Tables" Schema="dbo" />
     <EntitySet Name="Statistics" EntityType="Layer2.Store.Statistics" store:Type="Tables" Schema="dbo" />
+    <EntitySet Name="ExerciseExps" EntityType="Layer2.Store.ExerciseExps" store:Type="Tables" Schema="dbo" />
     <EntitySet Name="Notifications_ScheduledReminder" EntityType="Layer2.Store.Notifications_ScheduledReminder" store:Type="Tables" Schema="dbo" />
     <EntitySet Name="Notifications_EmailNotification" EntityType="Layer2.Store.Notifications_EmailNotification" store:Type="Tables" Schema="dbo" />
-    <EntitySet Name="ExerciseBases_Exercise" EntityType="Layer2.Store.ExerciseBases_Exercise" store:Type="Tables" Schema="dbo" />
     <AssociationSet Name="LoggedExerciseSetAttributes" Association="Layer2.Store.LoggedExerciseSetAttributes">
       <End Role="LoggedExercise" EntitySet="LoggedExercises" />
       <End Role="SetAttributes" EntitySet="SetAttributes" />
     </AssociationSet>
     <AssociationSet Name="ScheduledExerciseExercise" Association="Layer2.Store.ScheduledExerciseExercise">
       <End Role="ScheduledExercise" EntitySet="ScheduledExercises" />
-      <End Role="Exercise" EntitySet="ExerciseBases" />
+      <End Role="Exercise" EntitySet="Exercises" />
     </AssociationSet>
     <AssociationSet Name="ExerciseGoalSetAttributes" Association="Layer2.Store.ExerciseGoalSetAttributes">
       <End Role="ExerciseGoal" EntitySet="ExerciseGoals" />
@@ -78,12 +78,16 @@
       <End Role="Routine" EntitySet="Routines" />
     </AssociationSet>
     <AssociationSet Name="ExerciseLoggedExercise" Association="Layer2.Store.ExerciseLoggedExercise">
-      <End Role="Exercise" EntitySet="ExerciseBases" />
+      <End Role="Exercise" EntitySet="Exercises" />
       <End Role="LoggedExercise" EntitySet="LoggedExercises" />
     </AssociationSet>
     <AssociationSet Name="ExerciseGoalExerciseBase" Association="Layer2.Store.ExerciseGoalExerciseBase">
       <End Role="ExerciseGoal" EntitySet="ExerciseGoals" />
-      <End Role="ExerciseBase" EntitySet="ExerciseBases" />
+      <End Role="ExerciseBase" EntitySet="Exercises" />
+    </AssociationSet>
+    <AssociationSet Name="ExerciseExpExercise" Association="Layer2.Store.ExerciseExpExercise">
+      <End Role="ExerciseExp" EntitySet="ExerciseExps" />
+      <End Role="Exercise" EntitySet="Exercises" />
     </AssociationSet>
     <AssociationSet Name="FK_ScheduledReminder_inherits_Notification" Association="Layer2.Store.FK_ScheduledReminder_inherits_Notification">
       <End Role="Notification" EntitySet="Notifications" />
@@ -93,12 +97,8 @@
       <End Role="Notification" EntitySet="Notifications" />
       <End Role="EmailNotification" EntitySet="Notifications_EmailNotification" />
     </AssociationSet>
-    <AssociationSet Name="FK_Exercise_inherits_ExerciseBase" Association="Layer2.Store.FK_Exercise_inherits_ExerciseBase">
-      <End Role="ExerciseBase" EntitySet="ExerciseBases" />
-      <End Role="Exercise" EntitySet="ExerciseBases_Exercise" />
-    </AssociationSet>
   </EntityContainer>
-  <EntityType Name="ExerciseBases">
+  <EntityType Name="Exercises">
     <Key>
       <PropertyRef Name="id" />
     </Key>
@@ -231,6 +231,18 @@
     <Property Name="bmr" Type="float" Nullable="false" />
     <Property Name="vo2MAX" Type="float" Nullable="false" />
   </EntityType>
+  <EntityType Name="ExerciseExps">
+    <Key>
+      <PropertyRef Name="id" />
+    </Key>
+    <Property Name="baseExperiecne" Type="float" Nullable="false" />
+    <Property Name="weightModifier" Type="float" Nullable="false" />
+    <Property Name="repModifier" Type="float" Nullable="false" />
+    <Property Name="distanceModifier" Type="float" Nullable="false" />
+    <Property Name="timeModifier" Type="float" Nullable="false" />
+    <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Exercise_id" Type="int" Nullable="false" />
+  </EntityType>
   <EntityType Name="Notifications_ScheduledReminder">
     <Key>
       <PropertyRef Name="id" />
@@ -246,17 +258,6 @@
     <Property Name="id" Type="int" Nullable="false" />
     <Property Name="LimitBreaker_id" Type="int" Nullable="false" />
   </EntityType>
-  <EntityType Name="ExerciseBases_Exercise">
-    <Key>
-      <PropertyRef Name="id" />
-    </Key>
-    <Property Name="baseExperiecne" Type="float" Nullable="false" />
-    <Property Name="weightModifier" Type="float" Nullable="false" />
-    <Property Name="repModifier" Type="float" Nullable="false" />
-    <Property Name="distanceModifier" Type="float" Nullable="false" />
-    <Property Name="timeModifier" Type="float" Nullable="false" />
-    <Property Name="id" Type="int" Nullable="false" />
-  </EntityType>
   <Association Name="LoggedExerciseSetAttributes">
     <End Role="LoggedExercise" Type="Layer2.Store.LoggedExercises" Multiplicity="1" />
     <End Role="SetAttributes" Type="Layer2.Store.SetAttributes" Multiplicity="*" />
@@ -271,7 +272,7 @@
   </Association>
   <Association Name="ScheduledExerciseExercise">
     <End Role="ScheduledExercise" Type="Layer2.Store.ScheduledExercises" Multiplicity="*" />
-    <End Role="Exercise" Type="Layer2.Store.ExerciseBases" Multiplicity="1" />
+    <End Role="Exercise" Type="Layer2.Store.Exercises" Multiplicity="1" />
     <ReferentialConstraint>
       <Principal Role="Exercise">
         <PropertyRef Name="id" />
@@ -426,7 +427,7 @@
     </ReferentialConstraint>
   </Association>
   <Association Name="ExerciseLoggedExercise">
-    <End Role="Exercise" Type="Layer2.Store.ExerciseBases" Multiplicity="1" />
+    <End Role="Exercise" Type="Layer2.Store.Exercises" Multiplicity="1" />
     <End Role="LoggedExercise" Type="Layer2.Store.LoggedExercises" Multiplicity="*" />
     <ReferentialConstraint>
       <Principal Role="Exercise">
@@ -439,13 +440,25 @@
   </Association>
   <Association Name="ExerciseGoalExerciseBase">
     <End Role="ExerciseGoal" Type="Layer2.Store.ExerciseGoals" Multiplicity="*" />
-    <End Role="ExerciseBase" Type="Layer2.Store.ExerciseBases" Multiplicity="1" />
+    <End Role="ExerciseBase" Type="Layer2.Store.Exercises" Multiplicity="1" />
     <ReferentialConstraint>
       <Principal Role="ExerciseBase">
         <PropertyRef Name="id" />
       </Principal>
       <Dependent Role="ExerciseGoal">
         <PropertyRef Name="ExerciseBase_id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="ExerciseExpExercise">
+    <End Role="ExerciseExp" Type="Layer2.Store.ExerciseExps" Multiplicity="*" />
+    <End Role="Exercise" Type="Layer2.Store.Exercises" Multiplicity="1" />
+    <ReferentialConstraint>
+      <Principal Role="Exercise">
+        <PropertyRef Name="id" />
+      </Principal>
+      <Dependent Role="ExerciseExp">
+        <PropertyRef Name="Exercise_id" />
       </Dependent>
     </ReferentialConstraint>
   </Association>
@@ -473,24 +486,12 @@
       </Dependent>
     </ReferentialConstraint>
   </Association>
-  <Association Name="FK_Exercise_inherits_ExerciseBase">
-    <End Role="ExerciseBase" Type="Layer2.Store.ExerciseBases" Multiplicity="1" />
-    <End Role="Exercise" Type="Layer2.Store.ExerciseBases_Exercise" Multiplicity="0..1" />
-    <ReferentialConstraint>
-      <Principal Role="ExerciseBase">
-        <PropertyRef Name="id" />
-      </Principal>
-      <Dependent Role="Exercise">
-        <PropertyRef Name="id" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
 </Schema></edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
       <Schema xmlns="http://schemas.microsoft.com/ado/2008/09/edm" xmlns:cg="http://schemas.microsoft.com/ado/2006/04/codegeneration" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" Namespace="Layer2" Alias="Self" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation">
         <EntityContainer Name="Layer2Container" annotation:LazyLoadingEnabled="true">
-          <EntitySet Name="ExerciseBases" EntityType="Layer2.ExerciseBase" />
+          <EntitySet Name="Exercises" EntityType="Layer2.Exercise" />
           <EntitySet Name="ScheduledExercises" EntityType="Layer2.ScheduledExercise" />
           <EntitySet Name="LoggedExercises" EntityType="Layer2.LoggedExercise" />
           <EntitySet Name="SetAttributes" EntityType="Layer2.SetAttributes" />
@@ -500,7 +501,7 @@
           </AssociationSet>
           <AssociationSet Name="ScheduledExerciseExercise" Association="Layer2.ScheduledExerciseExercise">
             <End Role="ScheduledExercise" EntitySet="ScheduledExercises" />
-            <End Role="Exercise" EntitySet="ExerciseBases" />
+            <End Role="Exercise" EntitySet="Exercises" />
           </AssociationSet>
           <EntitySet Name="ExerciseGoals" EntityType="Layer2.ExerciseGoal" />
           <AssociationSet Name="ExerciseGoalSetAttributes" Association="Layer2.ExerciseGoalSetAttributes">
@@ -559,15 +560,20 @@
             <End Role="Routine" EntitySet="Routines" />
           </AssociationSet>
           <AssociationSet Name="ExerciseLoggedExercise" Association="Layer2.ExerciseLoggedExercise">
-            <End Role="Exercise" EntitySet="ExerciseBases" />
+            <End Role="Exercise" EntitySet="Exercises" />
             <End Role="LoggedExercise" EntitySet="LoggedExercises" />
           </AssociationSet>
           <AssociationSet Name="ExerciseGoalExerciseBase" Association="Layer2.ExerciseGoalExerciseBase">
             <End Role="ExerciseGoal" EntitySet="ExerciseGoals" />
-            <End Role="ExerciseBase" EntitySet="ExerciseBases" />
+            <End Role="ExerciseBase" EntitySet="Exercises" />
+          </AssociationSet>
+          <EntitySet Name="ExerciseExps" EntityType="Layer2.ExerciseExp" />
+          <AssociationSet Name="ExerciseExpExercise" Association="Layer2.ExerciseExpExercise">
+            <End Role="ExerciseExp" EntitySet="ExerciseExps" />
+            <End Role="Exercise" EntitySet="Exercises" />
           </AssociationSet>
         </EntityContainer>
-        <EntityType Name="ExerciseBase">
+        <EntityType Name="Exercise">
           <Key>
             <PropertyRef Name="id" />
           </Key>
@@ -583,6 +589,7 @@
           <Property Type="Int32" Name="id" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <NavigationProperty Name="LoggedExercise" Relationship="Layer2.ExerciseLoggedExercise" FromRole="Exercise" ToRole="LoggedExercise" />
           <Property Type="String" Name="muscleGroups" Nullable="false" />
+          <NavigationProperty Name="ExerciseExp" Relationship="Layer2.ExerciseExpExercise" FromRole="Exercise" ToRole="ExerciseExp" />
         </EntityType>
         <EntityType Name="ScheduledExercise">
           <Key>
@@ -626,7 +633,7 @@
         </Association>
         <Association Name="ScheduledExerciseExercise">
           <End Type="Layer2.ScheduledExercise" Role="ScheduledExercise" Multiplicity="*" />
-          <End Type="Layer2.ExerciseBase" Role="Exercise" Multiplicity="1" />
+          <End Type="Layer2.Exercise" Role="Exercise" Multiplicity="1" />
         </Association>
         <EntityType Name="ExerciseGoal">
           <Key>
@@ -672,12 +679,17 @@
           <End Type="Layer2.ScheduledRoutine" Role="ScheduledRoutine" Multiplicity="*" />
           <End Type="Layer2.Routine" Role="Routine" Multiplicity="1" />
         </Association>
-        <EntityType Name="Exercise" BaseType="Layer2.ExerciseBase">
+        <EntityType Name="ExerciseExp">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
           <Property Type="Double" Name="baseExperiecne" Nullable="false" />
           <Property Type="Double" Name="weightModifier" Nullable="false" />
           <Property Type="Double" Name="repModifier" Nullable="false" />
           <Property Type="Double" Name="distanceModifier" Nullable="false" />
           <Property Type="Double" Name="timeModifier" Nullable="false" />
+          <NavigationProperty Name="Exercise" Relationship="Layer2.ExerciseExpExercise" FromRole="ExerciseExp" ToRole="Exercise" />
+          <Property Type="Int32" Name="id" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
         </EntityType>
         <EntityType Name="LevelFormula">
           <Key>
@@ -786,12 +798,16 @@
           <End Type="Layer2.Routine" Role="Routine" Multiplicity="0..1" />
         </Association>
         <Association Name="ExerciseLoggedExercise">
-          <End Type="Layer2.ExerciseBase" Role="Exercise" Multiplicity="1" />
+          <End Type="Layer2.Exercise" Role="Exercise" Multiplicity="1" />
           <End Type="Layer2.LoggedExercise" Role="LoggedExercise" Multiplicity="*" />
         </Association>
         <Association Name="ExerciseGoalExerciseBase">
           <End Type="Layer2.ExerciseGoal" Role="ExerciseGoal" Multiplicity="*" />
-          <End Type="Layer2.ExerciseBase" Role="ExerciseBase" Multiplicity="1" />
+          <End Type="Layer2.Exercise" Role="ExerciseBase" Multiplicity="1" />
+        </Association>
+        <Association Name="ExerciseExpExercise">
+          <End Type="Layer2.ExerciseExp" Role="ExerciseExp" Multiplicity="0..1" />
+          <End Type="Layer2.Exercise" Role="Exercise" Multiplicity="1" />
         </Association>
       </Schema>
     </edmx:ConceptualModels>
@@ -799,9 +815,9 @@
     <edmx:Mappings>
     <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2008/09/mapping/cs">
   <EntityContainerMapping StorageEntityContainer="Layer2StoreContainer" CdmEntityContainer="Layer2Container">
-    <EntitySetMapping Name="ExerciseBases">
-      <EntityTypeMapping TypeName="IsTypeOf(Layer2.ExerciseBase)">
-        <MappingFragment StoreEntitySet="ExerciseBases">
+    <EntitySetMapping Name="Exercises">
+      <EntityTypeMapping TypeName="IsTypeOf(Layer2.Exercise)">
+        <MappingFragment StoreEntitySet="Exercises">
           <ScalarProperty Name="id" ColumnName="id" />
           <ScalarProperty Name="name" ColumnName="name" />
           <ScalarProperty Name="equipment" ColumnName="equipment" />
@@ -812,16 +828,6 @@
           <ScalarProperty Name="time" ColumnName="time" />
           <ScalarProperty Name="enabled" ColumnName="enabled" />
           <ScalarProperty Name="muscleGroups" ColumnName="muscleGroups" />
-        </MappingFragment>
-      </EntityTypeMapping>
-      <EntityTypeMapping TypeName="IsTypeOf(Layer2.Exercise)">
-        <MappingFragment StoreEntitySet="ExerciseBases_Exercise">
-          <ScalarProperty Name="id" ColumnName="id" />
-          <ScalarProperty Name="baseExperiecne" ColumnName="baseExperiecne" />
-          <ScalarProperty Name="weightModifier" ColumnName="weightModifier" />
-          <ScalarProperty Name="repModifier" ColumnName="repModifier" />
-          <ScalarProperty Name="distanceModifier" ColumnName="distanceModifier" />
-          <ScalarProperty Name="timeModifier" ColumnName="timeModifier" />
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
@@ -948,6 +954,18 @@
           <ScalarProperty Name="rmr" ColumnName="rmr" />
           <ScalarProperty Name="bmr" ColumnName="bmr" />
           <ScalarProperty Name="vo2MAX" ColumnName="vo2MAX" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="ExerciseExps">
+      <EntityTypeMapping TypeName="IsTypeOf(Layer2.ExerciseExp)">
+        <MappingFragment StoreEntitySet="ExerciseExps">
+          <ScalarProperty Name="id" ColumnName="id" />
+          <ScalarProperty Name="baseExperiecne" ColumnName="baseExperiecne" />
+          <ScalarProperty Name="weightModifier" ColumnName="weightModifier" />
+          <ScalarProperty Name="repModifier" ColumnName="repModifier" />
+          <ScalarProperty Name="distanceModifier" ColumnName="distanceModifier" />
+          <ScalarProperty Name="timeModifier" ColumnName="timeModifier" />
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
@@ -1080,6 +1098,14 @@
         <ScalarProperty Name="id" ColumnName="id" />
       </EndProperty>
     </AssociationSetMapping>
+    <AssociationSetMapping Name="ExerciseExpExercise" TypeName="Layer2.ExerciseExpExercise" StoreEntitySet="ExerciseExps">
+      <EndProperty Name="Exercise">
+        <ScalarProperty Name="id" ColumnName="Exercise_id" />
+      </EndProperty>
+      <EndProperty Name="ExerciseExp">
+        <ScalarProperty Name="id" ColumnName="id" />
+      </EndProperty>
+    </AssociationSetMapping>
   </EntityContainerMapping>
 </Mapping></edmx:Mappings>
   </edmx:Runtime>
@@ -1100,7 +1126,7 @@
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
       <Diagram Name="Layer2" ZoomLevel="94" >
-        <EntityTypeShape EntityType="Layer2.ExerciseBase" Width="1.5" PointX="3.5" PointY="1.125" Height="3.5186979166666656" />
+        <EntityTypeShape EntityType="Layer2.Exercise" Width="1.5" PointX="3.5" PointY="1.125" Height="3.5186979166666656" />
         <EntityTypeShape EntityType="Layer2.ScheduledExercise" Width="2.25" PointX="3.125" PointY="6.25" Height="1.7879850260416665" />
         <EntityTypeShape EntityType="Layer2.LoggedExercise" Width="1.5" PointX="6.25" PointY="1.75" Height="2.5571907552083335" />
         <EntityTypeShape EntityType="Layer2.SetAttributes" Width="1.5" PointX="6.25" PointY="7.375" Height="2.3648893229166656" />
@@ -1129,7 +1155,7 @@
           <ConnectorPoint PointX="12.125" PointY="3.6824446614583333" />
           <ConnectorPoint PointX="11.125" PointY="3.6824446614583333" />
         </AssociationConnector>
-        <EntityTypeShape EntityType="Layer2.Exercise" Width="1.625" PointX="0.5" PointY="0.5" Height="1.9802864583333331" />
+        <EntityTypeShape EntityType="Layer2.ExerciseExp" Width="1.625" PointX="0.5" PointY="0.5" Height="2.364889322916667" />
         <EntityTypeShape EntityType="Layer2.LevelFormula" Width="1.5" PointX="7.875" PointY="0.5" Height="1.787985026041667" />
         <EntityTypeShape EntityType="Layer2.ExperienceAtrophy" Width="1.75" PointX="9.875" PointY="0.5" Height="1.59568359375" />
         <EntityTypeShape EntityType="Layer2.Notification" Width="1.5" PointX="13.125" PointY="8.875" Height="2.1725878906249996" />
@@ -1198,10 +1224,6 @@
           <ConnectorPoint PointX="7" PointY="5.110087890625" />
           <ConnectorPoint PointX="7" PointY="4.3071907552083335" />
         </AssociationConnector>
-        <InheritanceConnector EntityType="Layer2.Exercise" ManuallyRouted="false">
-          <ConnectorPoint PointX="3.5" PointY="1.8026432291666668" />
-          <ConnectorPoint PointX="2.125" PointY="1.8026432291666668" />
-        </InheritanceConnector>
         <AssociationConnector Association="Layer2.LoggedExerciseRoutine">
           <ConnectorPoint PointX="7.75" PointY="3.3288378906250005" />
           <ConnectorPoint PointX="9.625" PointY="3.3288378906250005" />
@@ -1229,6 +1251,10 @@
           <ConnectorPoint PointX="5.135416666666667" PointY="5.75" />
           <ConnectorPoint PointX="4.5097682500000005" PointY="5.75" />
           <ConnectorPoint PointX="4.5097682500000005" PointY="4.451396484375" />
+        </AssociationConnector>
+        <AssociationConnector Association="Layer2.ExerciseExpExercise">
+          <ConnectorPoint PointX="2.125" PointY="1.9949446614583337" />
+          <ConnectorPoint PointX="3.5" PointY="1.9949446614583337" />
         </AssociationConnector>
       </Diagram>
     </edmx:Diagrams>

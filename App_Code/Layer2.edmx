@@ -638,7 +638,7 @@
           <NavigationProperty Name="ExerciseBase" Relationship="Layer2.ExerciseGoalExerciseBase" FromRole="ExerciseGoal" ToRole="ExerciseBase" />
         </EntityType>
         <Association Name="ExerciseGoalSetAttributes">
-          <End Type="Layer2.ExerciseGoal" Role="ExerciseGoal" Multiplicity="1" />
+          <End Type="Layer2.ExerciseGoal" Role="ExerciseGoal" Multiplicity="0..1" />
           <End Type="Layer2.SetAttributes" Role="SetAttributes" Multiplicity="1" />
         </Association>
         <EntityType Name="Routine">

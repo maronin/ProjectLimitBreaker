@@ -373,21 +373,6 @@ public partial class ExerciseGoal
     #endregion
     #region Navigation Properties
 
-    public virtual SetAttributes SetAttribute
-    {
-        get { return _setAttribute; }
-        set
-        {
-            if (!ReferenceEquals(_setAttribute, value))
-            {
-                var previousValue = _setAttribute;
-                _setAttribute = value;
-                FixupSetAttribute(previousValue);
-            }
-        }
-    }
-    private SetAttributes _setAttribute;
-
     public virtual Routine Routine
     {
         get { return _routine; }
@@ -409,21 +394,23 @@ public partial class ExerciseGoal
         set;
     }
 
-    #endregion
-    #region Association Fixup
-
-    private void FixupSetAttribute(SetAttributes previousValue)
+    public virtual SetAttributes SetAttribute
     {
-        if (previousValue != null && ReferenceEquals(previousValue.ExerciseGoal, this))
+        get { return _setAttribute; }
+        set
         {
-            previousValue.ExerciseGoal = null;
-        }
-
-        if (SetAttribute != null)
-        {
-            SetAttribute.ExerciseGoal = this;
+            if (!ReferenceEquals(_setAttribute, value))
+            {
+                var previousValue = _setAttribute;
+                _setAttribute = value;
+                FixupSetAttribute(previousValue);
+            }
         }
     }
+    private SetAttributes _setAttribute;
+
+    #endregion
+    #region Association Fixup
 
     private void FixupRoutine(Routine previousValue)
     {
@@ -438,6 +425,19 @@ public partial class ExerciseGoal
             {
                 Routine.ExerciseGoals.Add(this);
             }
+        }
+    }
+
+    private void FixupSetAttribute(SetAttributes previousValue)
+    {
+        if (previousValue != null && ReferenceEquals(previousValue.ExerciseGoal, this))
+        {
+            previousValue.ExerciseGoal = null;
+        }
+
+        if (SetAttribute != null)
+        {
+            SetAttribute.ExerciseGoal = this;
         }
     }
 

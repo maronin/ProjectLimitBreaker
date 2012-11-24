@@ -2,7 +2,7 @@
 -- --------------------------------------------------
 -- Entity Designer DDL Script for SQL Server 2005, 2008, and Azure
 -- --------------------------------------------------
--- Date Created: 11/24/2012 16:54:34
+-- Date Created: 11/24/2012 17:01:59
 -- Generated from EDMX file: C:\Users\Lienhart\Documents\Repos\Project-LimitBreaker\App_Code\Layer2.edmx
 -- --------------------------------------------------
 
@@ -181,9 +181,9 @@ GO
 -- Creating table 'ExerciseGoals'
 CREATE TABLE [dbo].[ExerciseGoals] (
     [id] int IDENTITY(1,1) NOT NULL,
-    [SetAttribute_id] int  NOT NULL,
     [Routine_id] int  NOT NULL,
-    [ExerciseBase_id] int  NOT NULL
+    [ExerciseBase_id] int  NOT NULL,
+    [SetAttribute_id] int  NOT NULL
 );
 GO
 
@@ -415,20 +415,6 @@ ON [dbo].[ScheduledExercises]
     ([ExerciseBase_id]);
 GO
 
--- Creating foreign key on [SetAttribute_id] in table 'ExerciseGoals'
-ALTER TABLE [dbo].[ExerciseGoals]
-ADD CONSTRAINT [FK_ExerciseGoalSetAttributes]
-    FOREIGN KEY ([SetAttribute_id])
-    REFERENCES [dbo].[SetAttributes]
-        ([id])
-    ON DELETE NO ACTION ON UPDATE NO ACTION;
-
--- Creating non-clustered index for FOREIGN KEY 'FK_ExerciseGoalSetAttributes'
-CREATE INDEX [IX_FK_ExerciseGoalSetAttributes]
-ON [dbo].[ExerciseGoals]
-    ([SetAttribute_id]);
-GO
-
 -- Creating foreign key on [Routine_id] in table 'ExerciseGoals'
 ALTER TABLE [dbo].[ExerciseGoals]
 ADD CONSTRAINT [FK_RoutineExerciseGoal]
@@ -613,16 +599,30 @@ GO
 
 -- Creating foreign key on [Exercise_id] in table 'ExerciseExps'
 ALTER TABLE [dbo].[ExerciseExps]
-ADD CONSTRAINT [FK_ExerciseExpExercise]
+ADD CONSTRAINT [FK_ExerciseExerciseExp]
     FOREIGN KEY ([Exercise_id])
     REFERENCES [dbo].[Exercises]
         ([id])
     ON DELETE NO ACTION ON UPDATE NO ACTION;
 
--- Creating non-clustered index for FOREIGN KEY 'FK_ExerciseExpExercise'
-CREATE INDEX [IX_FK_ExerciseExpExercise]
+-- Creating non-clustered index for FOREIGN KEY 'FK_ExerciseExerciseExp'
+CREATE INDEX [IX_FK_ExerciseExerciseExp]
 ON [dbo].[ExerciseExps]
     ([Exercise_id]);
+GO
+
+-- Creating foreign key on [SetAttribute_id] in table 'ExerciseGoals'
+ALTER TABLE [dbo].[ExerciseGoals]
+ADD CONSTRAINT [FK_SetAttributesExerciseGoal]
+    FOREIGN KEY ([SetAttribute_id])
+    REFERENCES [dbo].[SetAttributes]
+        ([id])
+    ON DELETE NO ACTION ON UPDATE NO ACTION;
+
+-- Creating non-clustered index for FOREIGN KEY 'FK_SetAttributesExerciseGoal'
+CREATE INDEX [IX_FK_SetAttributesExerciseGoal]
+ON [dbo].[ExerciseGoals]
+    ([SetAttribute_id]);
 GO
 
 -- Creating foreign key on [id] in table 'Notifications_ScheduledReminder'

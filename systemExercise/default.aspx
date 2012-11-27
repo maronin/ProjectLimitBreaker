@@ -12,7 +12,6 @@
     <h4>Delete system exercise</h4>
     <uc2:ucDeleteExercise ID="ucDeleteExercise" runat="server" />
     <h4>Disable system exercise</h4>
-    <h4>Modify system exercise</h4>
         <asp:ObjectDataSource ID="ObjectDataSource1" runat="server" 
             SelectMethod="getAllExercises" TypeName="Layer2Manager"></asp:ObjectDataSource>
         <asp:DropDownList ID="ddlExercises" runat="server" 

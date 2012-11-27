@@ -15,11 +15,11 @@ public class ExerciseManager
 		//
 	}
 
-    public List<ExerciseBase> getExercises() 
+    public List<Exercise> getExercises() 
     {
         using (var context = new Layer2Container())
         {
-            return context.ExerciseBases.OrderBy(s => s.name).ToList();
+            return context.Exercises.OrderBy(s => s.name).ToList();
         }
     }
 
@@ -30,13 +30,15 @@ public class ExerciseManager
         {
             try
             {
-                var exercise = context.ExerciseBases.Where(s => s.id == id).FirstOrDefault();
+                var exercise = context.Exercises.Where(s => s.id == id).FirstOrDefault();
+                var exp = context.ExerciseExps.Where(s => s.Exercise.id == id).FirstOrDefault();
 
-                exercise.MuscleGroups.Clear();
                 exercise.LoggedExercise.Clear();
                 exercise.ScheduledExercises.Clear();
                 //ExerciseGoal doesn't have a navigation property
-                context.ExerciseBases.DeleteObject(exercise);
+
+                context.ExerciseExps.DeleteObject(exp);
+                context.Exercises.DeleteObject(exercise);
                 context.SaveChanges();
             }
 

@@ -45,6 +45,7 @@ public partial class _Default : System.Web.UI.Page
         exerciseVideo.Visible = true;
         exerciseVideo.Text = exercise.videoLink;
         exerciseAttributes.Visible = true;
+        exerciseAttributes.Text = "";
         if(exercise.weight)
             exerciseAttributes.Text += "Weight\n";
         if(exercise.rep)

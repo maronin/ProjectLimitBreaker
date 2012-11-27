@@ -31,13 +31,14 @@ public class ExerciseManager
             try
             {
                 var exercise = context.Exercises.Where(s => s.id == id).FirstOrDefault();
-                var exp = context.ExerciseExps.Where(s => s.Exercise.id == id).FirstOrDefault();
+
+                //var exp = context.ExerciseExps.Where(s => s.Exercise.id == id).FirstOrDefault(); // Make it so it only works when there is a related ExerciseExp
+                //context.ExerciseExps.DeleteObject(exp);
 
                 exercise.LoggedExercise.Clear();
                 exercise.ScheduledExercises.Clear();
                 //ExerciseGoal doesn't have a navigation property
 
-                context.ExerciseExps.DeleteObject(exp);
                 context.Exercises.DeleteObject(exercise);
                 context.SaveChanges();
             }

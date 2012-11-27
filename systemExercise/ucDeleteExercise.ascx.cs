@@ -9,25 +9,30 @@ public partial class systemExercise_ucDeleteExercise : System.Web.UI.UserControl
 {
     protected void Page_Load(object sender, EventArgs e)
     {
-        if (ddlSystemExercises.Items.Count < 1)
-        {
-            lblDeletionResult.Text = "Nothing in here to see";
-        }
+        
     }
     protected void btnDeleteExercise_Click(object sender, EventArgs e)
     {
         ExerciseManager deleter = new ExerciseManager();
 
-        bool result = deleter.deleteExerciseById(Convert.ToInt32(ddlSystemExercises.SelectedItem.Value));
-
-        if (result)
+        try
         {
-            lblDeletionResult.Text = "it worked";
+            bool result = deleter.deleteExerciseById(Convert.ToInt32(ddlSystemExercises.SelectedItem.Value));
+
+            if (result)
+            {
+                lblDeletionResult.Text = "The exercise has been removed";
+            }
+
+            else
+            {
+                lblDeletionResult.Text = "Something went wrong with the database deletion";
+            }
         }
 
-        else
+        catch (Exception exc)
         {
-            lblDeletionResult.Text = "it did not work";
+            lblDeletionResult.Text = "Something went wrong with the execution of the page";
         }
     }
 }

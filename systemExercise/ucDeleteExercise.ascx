@@ -12,7 +12,7 @@
     </p>
     <br />
     <asp:Button ID="btnDeleteExercise" runat="server" Text="Delete Exercise" 
-        OnClick="btnDeleteExercise_Click" />
+        OnClientClick="return confirm('Doing this will irreversibly remove the exercise from the system. Are you sure?');" OnClick="btnDeleteExercise_Click" />
     <asp:Label ID="lblDeletionResult" runat="server"></asp:Label>
 </div>
 <br />

@@ -54,5 +54,7 @@ public partial class _Default : System.Web.UI.Page
             exerciseAttributes.Text += "Time\n";
         if(exercise.distance)
             exerciseAttributes.Text += "Distance\n";
+        exerciseEnabled.Visible = true;
+        exerciseEnabled.Text = exercise.enabled.ToString();
     }
 }

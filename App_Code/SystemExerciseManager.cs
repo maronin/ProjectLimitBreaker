@@ -61,7 +61,7 @@ public class SystemExerciseManager
 
 
             //context.LoadProperty(query, "MuscleGroups");
-            return query.ToList();
+            return query.OrderBy(exercise => exercise.name).ToList();
         }
     }
 
@@ -76,7 +76,15 @@ public class SystemExerciseManager
 
 
             //context.LoadProperty(query, "MuscleGroups");
-            return query.ToList();
+            return query.OrderBy(exercise => exercise.name).ToList();
+        }
+    }
+
+    public Exercise getExercise(string exerciseName)
+    {
+        using (var context = new Layer2Container())
+        {
+            return context.Exercises.FirstOrDefault(exercise => exercise.name == exerciseName);
         }
     }
 }

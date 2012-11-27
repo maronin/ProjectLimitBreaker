@@ -15,11 +15,11 @@ public class disableManager
 		//
 	}
 
-    public List<ExerciseBase> getExercises()
+    public List<Exercise> getExercises()
     {
         using (var context = new Layer2Container())
         {
-            return context.ExerciseBases.OrderBy(s => s.name).ToList();
+            return context.Exercises.OrderBy(s => s.name).ToList();
         }
     }
 
@@ -31,7 +31,7 @@ public class disableManager
         {
             try
             {
-                ExerciseBase exercise = context.ExerciseBases.Where(s => s.id == id).FirstOrDefault();
+                Exercise exercise = context.Exercises.Where(s => s.id == id).FirstOrDefault();
                 exercise.enabled = false;
                 context.SaveChanges();
             }
@@ -53,7 +53,7 @@ public class disableManager
         {
             try
             {
-                ExerciseBase exercise = context.ExerciseBases.Where(s => s.id == id).FirstOrDefault();
+                Exercise exercise = context.Exercises.Where(s => s.id == id).FirstOrDefault();
                 exercise.enabled = true;
                 context.SaveChanges();
             }
@@ -64,6 +64,14 @@ public class disableManager
             }
 
             return result;
+        }
+    }
+
+    public bool getExerciseEnabledValueById(int id)
+    {
+        using (var context = new Layer2Container())
+        {
+            return context.Exercises.Where(s => s.id == id).FirstOrDefault().enabled;
         }
     }
 }

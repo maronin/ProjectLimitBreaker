@@ -18,12 +18,14 @@
         <br />
         Search via muscle groups: 
         <asp:RadioButtonList ID="MuscleGroupRBL" runat="server" 
-            onselectedindexchanged="MuscleGroupRBL_SelectedIndexChanged">
+            onselectedindexchanged="MuscleGroupRBL_SelectedIndexChanged" 
+            AutoPostBack="True">
             <asp:ListItem>Chest</asp:ListItem>
             <asp:ListItem>Back</asp:ListItem>
             <asp:ListItem>Shoulders</asp:ListItem>
             <asp:ListItem>Arms</asp:ListItem>
             <asp:ListItem>Legs</asp:ListItem>
+            <asp:ListItem>Cardio</asp:ListItem>
         </asp:RadioButtonList>
         <asp:DropDownList ID="ExerciseDDL" runat="server">
         </asp:DropDownList>

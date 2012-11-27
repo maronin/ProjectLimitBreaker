@@ -22,6 +22,7 @@ public partial class systemExercise_ucDeleteExercise : System.Web.UI.UserControl
             if (result)
             {
                 lblDeletionResult.Text = "The exercise has been removed";
+                Response.Redirect("default.aspx");
             }
 
             else

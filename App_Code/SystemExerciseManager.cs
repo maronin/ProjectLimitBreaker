@@ -18,11 +18,11 @@ public class SystemExerciseManager
         _context = System.Web.HttpContext.Current.ApplicationInstance;
     }
 
-    public List<ExerciseBase> getAllExercises()
+    public List<Exercise> getAllExercises()
     {
         using (var context = new Layer2Container())
         {
-            return context.ExerciseBases.OrderBy(o => o.id).ToList();
+            return context.Exercises.OrderBy(o => o.id).ToList();
         }
     }
 
@@ -37,25 +37,85 @@ public class SystemExerciseManager
             // label is what shows up in the drop down list of names, value is what shows up on the textbox when a name is selected
             // return null if no entry in the database, otherwise display all exercises
             // did not check if it would be in ascending/descending order
-            if (context.ExerciseBases.Count() == 0)
+            if (context.Exercises.Count() == 0)
             {
                 rc = null;
             }
             else
             {
-                rc = context.ExerciseBases.Select(x => new Juice.AutocompleteItem { Label = x.name, Value = x.name }).ToList();
+                rc = context.Exercises.Select(x => new Juice.AutocompleteItem { Label = x.name, Value = x.name }).ToList();
             }
 
             return rc;
         }
     }
-    /*
-    public List<ExerciseBase> getExercisesByName(string exerciseName)
+
+   public bool createNewExercise(string exerciseName, string muscleGroups, string equipment, string videoLink, bool rep, bool weight, bool distance, bool time, bool enabled)
+    {
+        bool rc = false;
+
+        using (var context = new Layer2Container())
+        {
+            Exercise newExercise = new Exercise();
+            try { 
+            if ((context.Exercises.FirstOrDefault(exercise => exercise.name == exerciseName).name == exerciseName))
+                rc = false;              
+            }
+            catch (NullReferenceException e)
+            {
+                newExercise.name = exerciseName;
+                newExercise.muscleGroups = muscleGroups;
+                newExercise.equipment = equipment;
+                newExercise.videoLink = videoLink;
+                newExercise.rep = rep;
+                newExercise.weight = weight;
+                newExercise.distance = distance;
+                newExercise.time = time;
+                newExercise.enabled = enabled;
+
+                context.Exercises.AddObject(newExercise);
+                context.SaveChanges();
+                rc = true;
+            }
+            return rc;
+        }
+    }
+
+    public List<Exercise> getExercisesByName(string exerciseName)
     {
         using (var context = new Layer2Container())
         {
-            con
+            //context.ContextOptions.LazyLoadingEnabled = false;
+            var query = (from exercise in context.Exercises
+                         where exercise.name.Contains(exerciseName)
+                         select exercise);
+
+
+            //context.LoadProperty(query, "MuscleGroups");
+            return query.OrderBy(exercise => exercise.name).ToList();
         }
     }
-     */
+
+    public List<Exercise> getExercisesByMuscleGroup(string muscleGroup)
+    {
+        using (var context = new Layer2Container())
+        {
+            //context.ContextOptions.LazyLoadingEnabled = false;
+            var query = (from exercise in context.Exercises
+                         where exercise.muscleGroups.Contains(muscleGroup)
+                         select exercise);
+
+
+            //context.LoadProperty(query, "MuscleGroups");
+            return query.OrderBy(exercise => exercise.name).ToList();
+        }
+    }
+
+    public Exercise getExercise(string exerciseName)
+    {
+        using (var context = new Layer2Container())
+        {
+            return context.Exercises.FirstOrDefault(exercise => exercise.name == exerciseName);
+        }
+    }
 }

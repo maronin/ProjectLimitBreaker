@@ -25,6 +25,9 @@
             AutoPostBack="False" />
         <juice:Autocomplete ID="exerciseAutoComplete" runat="server" TargetControlID="exerciseSearchBox" />
         <asp:Button ID="exerciseSearchButton" runat="server" Text="Search" OnClick="exerciseSearchButton_Click" />
+        <asp:RegularExpressionValidator ID="RegularExpressionValidator1" runat="server" 
+            ControlToValidate="exerciseSearchBox" ErrorMessage="No symbols" ForeColor="Red" 
+            ValidationExpression="^[a-zA-Z0-9]+$"></asp:RegularExpressionValidator>
         <br />
         Search via muscle groups: 
         <asp:RadioButtonList ID="MuscleGroupRBL" runat="server" 

@@ -8,6 +8,17 @@
         font-size: 15px;
         color: Red;
     }
+    .style2
+    {
+        height: 54px;
+    }
+    .style3
+    {
+        width: 421px;
+        font-size: 15px;
+        color: Red;
+        height: 54px;
+    }
 </style>
 
 <script>
@@ -21,7 +32,21 @@
             }
         }
         args.IsValid = false;
-    }</script>
+    }
+
+    function ValidateModuleList2(source, args) {
+        var chkListModules = document.getElementById('<%= cblAttributes.ClientID%>');
+        var chkListinputs = chkListModules.getElementsByTagName("input");
+        for (var i = 0; i < chkListinputs.length; i++) {
+            if (chkListinputs[i].checked) {
+                args.IsValid = true;
+                return;
+            }
+        }
+        args.IsValid = false;
+    }
+    
+    </script>
 
 
 <div>
@@ -66,24 +91,24 @@
             </td>
         </tr>
                 <tr>
-            <td>
+            <td class="style2">
                 <p>
                     Exercise Attributes: </p>
             </td>
-            <td>
+            <td class="style2">
                 <asp:CheckBoxList ID="cblAttributes" runat="server" CssClass="cblStyle" 
                     RepeatDirection="Horizontal">
                     <asp:ListItem>Rep</asp:ListItem>
                     <asp:ListItem>Weight</asp:ListItem>
                     <asp:ListItem>Distance</asp:ListItem>
                     <asp:ListItem>Time</asp:ListItem>
-                    <asp:ListItem>Enabled</asp:ListItem>
                 </asp:CheckBoxList>
+              <asp:CheckBox ID="cbEnabled" runat="server" Text="Enabled" CssClass="cblStyle" />
             </td>
-            <td class ="style1">
-<%--            <asp:CustomValidator runat="server" ID="CustomValidator1"
-  ClientValidationFunction="ValidateModuleList"
-  ErrorMessage="*Please select at least one attribute" ValidationGroup="AddExercise"></asp:CustomValidator>--%>
+            <td class ="style3">
+            <asp:CustomValidator runat="server" ID="CustomValidator1"
+  ClientValidationFunction="ValidateModuleList2"
+  ErrorMessage="*Please select at least one attribute" ValidationGroup="AddExercise"></asp:CustomValidator>
             </td>
         </tr>
         <tr>
@@ -91,13 +116,13 @@
                 <p>
                     Equipment:</p>
             </td>
-            <td>
+            <td class="style1" >
                 <asp:TextBox ID="tbEquipment" runat="server" Height="144px" CssClass="tbStyle" 
                     TextMode="MultiLine"></asp:TextBox>
-<%--                <asp:RegularExpressionValidator ID="RegularExpressionValidator1" runat="server" 
-                    ControlToValidate="tbEquipment" ErrorMessage="*Please enter a proper name" 
-                    ValidationExpression="^[A-Za-z]{1,}$" ForeColor="Red" 
-                    ValidationGroup="AddExercise"></asp:RegularExpressionValidator>--%>
+                <asp:RegularExpressionValidator ID="RegularExpressionValidator1" runat="server" 
+                    ControlToValidate="tbEquipment" ErrorMessage="*Please enter non-alphanumeric characters for equipment" 
+                    ValidationExpression="^[A-Za-z ]{1,}$" ForeColor="Red" 
+                    ValidationGroup="AddExercise"></asp:RegularExpressionValidator>
             </td>
         </tr>
         <tr>
@@ -108,6 +133,13 @@
             </td>
             <td>
                 <asp:TextBox ID="tbVideoLink" runat="server" CssClass="tbStyle"></asp:TextBox>
+            </td>
+            <td class ="style1">
+                 <asp:RequiredFieldValidator
+                    ID="RequiredFieldValidator3" runat="server" 
+                    ErrorMessage="*Please enter a video link" ControlToValidate="tbVideoLink" 
+                    Display="Dynamic" ForeColor="Red" SetFocusOnError="True" 
+                    ValidationGroup="AddExercise"></asp:RequiredFieldValidator>
             </td>
         </tr>
     </table>

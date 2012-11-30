@@ -20,11 +20,13 @@
         <label for="_Default">
             Search for an exercise via name:
         </label>
-        <!-- Need a checker below to avoid the following symbols !@#$%^&*()-+|\}{[]"':;/?.>,<~` -->
         <asp:TextBox runat="server" ID="exerciseSearchBox" ClientIDMode="Static" 
             AutoPostBack="False" />
         <juice:Autocomplete ID="exerciseAutoComplete" runat="server" TargetControlID="exerciseSearchBox" />
         <asp:Button ID="exerciseSearchButton" runat="server" Text="Search" OnClick="exerciseSearchButton_Click" />
+        <asp:RegularExpressionValidator ID="RegularExpressionValidator1" runat="server" 
+            ControlToValidate="exerciseSearchBox" ErrorMessage="No symbols" ForeColor="Red" 
+            ValidationExpression="^[a-zA-Z0-9 ]+$"></asp:RegularExpressionValidator>
         <br />
         Search via muscle groups: 
         <asp:RadioButtonList ID="MuscleGroupRBL" runat="server" 
@@ -40,6 +42,8 @@
         <asp:DropDownList ID="ExerciseDDL" runat="server" AutoPostBack="True" 
             onselectedindexchanged="ExerciseDDL_SelectedIndexChanged">
         </asp:DropDownList>
+        <asp:Label ID="exceriseNotFound" runat="server" ForeColor="Red" 
+            Text="No exercise found" Visible="False"></asp:Label>
         <br />
         <table class="style1">
             <tr>

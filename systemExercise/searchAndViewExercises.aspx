@@ -78,4 +78,11 @@
         </table>
         <br />
     </div>
+    <div>
+    <asp:RadioButtonList ID="rblEnaber" runat="server" AutoPostBack="True" 
+        onselectedindexchanged="rblEnaber_SelectedIndexChanged" TextAlign="Left">
+        <asp:ListItem Value="1">Enabled</asp:ListItem>
+        <asp:ListItem Value="0">Disabled</asp:ListItem>
+    </asp:RadioButtonList>
+    </div>
 </asp:Content>

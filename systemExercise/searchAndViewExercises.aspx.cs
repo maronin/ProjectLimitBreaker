@@ -68,6 +68,30 @@ public partial class _Default : System.Web.UI.Page
         exerciseEnabled.Visible = true;
         exerciseEnabled.Text = exercise.enabled.ToString();
     }
+    //protected void rblEnaber_SelectedIndexChanged(object sender, EventArgs e)
+    //{
+    //    disableManager enabler = new disableManager();
+
+    //    try
+    //    {
+    //        if (Convert.ToInt32(rblEnaber.SelectedValue) == 1)
+    //        {
+    //            enabler.enableExerciseById(Convert.ToInt32(ddlExercises.SelectedItem.Value));
+    //        }
+
+    //        else if (Convert.ToInt32(rblEnaber.SelectedValue) == 0)
+    //        {
+    //            enabler.disableExerciseById(Convert.ToInt32(ddlExercises.SelectedItem.Value));
+    //        }
+
+    //        Response.Redirect("default.aspx");
+    //    }
+
+    //    catch (Exception exc)
+    //    {
+
+    //    }
+    //}
     protected void exerciesNotFound()
     {
         exerciseName.Visible = false;

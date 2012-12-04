@@ -134,10 +134,11 @@ public partial class _Default : System.Web.UI.Page
         String[] muscleGroups;
         initBoxes();
 
-        rblEnaber.Visible = true;
+        
 
         if (foundExercise != null)
         {
+            rblEnaber.Visible = true;
             muscleGroups = manager.splitMuscleGroups(foundExercise.muscleGroups);
             Panel1.Visible = true;
             if (foundExercise.rep)

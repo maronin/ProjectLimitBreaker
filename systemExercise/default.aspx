@@ -13,6 +13,32 @@
             width: 20px;
         }
     </style>
+    <script type="text/javascript">
+        function validateMuscles(source, args) {
+            var chkListModules = document.getElementById('<%= cblMuscleGroups.ClientID%>');
+            var chkListinputs = chkListModules.getElementsByTagName("input");
+            for (var i = 0; i < chkListinputs.length; i++) {
+                if (chkListinputs[i].checked) {
+                    args.IsValid = true;
+                    return;
+                }
+            }
+            args.IsValid = false;
+        }
+
+        function validateAttributes(source, args) {
+            var chkListModules = document.getElementById('<%= cblAttributes.ClientID%>');
+            var chkListinputs = chkListModules.getElementsByTagName("input");
+            for (var i = 0; i < chkListinputs.length; i++) {
+                if (chkListinputs[i].checked) {
+                    args.IsValid = true;
+                    return;
+                }
+            }
+            args.IsValid = false;
+        }
+    
+</script>
 </asp:Content>
 <asp:Content ID="Content2" ContentPlaceHolderID="ContentPlaceHolder1" runat="Server">
     <div>
@@ -115,8 +141,8 @@
                         </asp:CheckBoxList>
                     </td>
                     <td class="style1">
-                        <asp:CustomValidator runat="server" ID="cvmodulelist" ClientValidationFunction="ValidateModuleList"
-                            ErrorMessage="*Please select at least one muscle group" ValidationGroup="AddExercise"></asp:CustomValidator>
+                        <asp:CustomValidator runat="server" ID="cvmodulelist" ClientValidationFunction="validateMuscles"
+                    ErrorMessage="*Please select at least one muscle group" ValidationGroup="ModifyExercise"></asp:CustomValidator>
                     </td>
                 </tr>
                 <tr>
@@ -131,6 +157,10 @@
                         <asp:RequiredFieldValidator ID="RequiredFieldValidator1" runat="server" ErrorMessage="*Exercise name required"
                             ControlToValidate="tbExerciseName" Display="Dynamic" ForeColor="Red" SetFocusOnError="True"
                             ValidationGroup="ModifyExercise"></asp:RequiredFieldValidator>
+                         
+                         <asp:RegularExpressionValidator ID="RegularExpressionValidator3" runat="server" ControlToValidate="tbExerciseName"
+                    ErrorMessage="*Please enter alphanumeric characters for name" ValidationExpression="^[0-9a-zA-Z ]+$"
+                    ForeColor="Red" ValidationGroup="ModifyExercise"></asp:RegularExpressionValidator>
                     </td>
                 </tr>
                 <tr>
@@ -148,12 +178,9 @@
                         </asp:CheckBoxList>
                     </td>
                     <td class="style1">
-                        <%--            <asp:CustomValidator runat="server" ID="CustomValidator1"
-  ClientValidationFunction="ValidateModuleList"
-  ErrorMessage="*Please select at least one attribute" ValidationGroup="AddExercise"></asp:CustomValidator>--%>
-                        <asp:CustomValidator ID="cvmodulelist0" runat="server" 
-                            ClientValidationFunction="ValidateModuleList" 
-                            ErrorMessage="*Please select at least attribute" ValidationGroup="AddExercise"></asp:CustomValidator>
+                        <asp:CustomValidator runat="server" ID="CustomValidator1" ClientValidationFunction="validateAttributes"
+                    ErrorMessage="*Please select at least one attribute" ValidationGroup="ModifyExercise"></asp:CustomValidator>
+
                     </td>
                 </tr>
                 <tr>
@@ -161,17 +188,18 @@
                         <p>
                             Equipment:</p>
                     </td>
-                    <td>
+                    <td class="style1">
                         <asp:TextBox ID="tbEquipment" runat="server" Height="144px" CssClass="tbStyle" TextMode="MultiLine"></asp:TextBox>
-                        <%--                <asp:RegularExpressionValidator ID="RegularExpressionValidator1" runat="server" 
+                        <asp:RegularExpressionValidator ID="RegularExpressionValidator2" runat="server" 
                     ControlToValidate="tbEquipment" ErrorMessage="*Please enter a proper name" 
                     ValidationExpression="^[A-Za-z]{1,}$" ForeColor="Red" 
-                    ValidationGroup="AddExercise"></asp:RegularExpressionValidator>--%>
+                    ValidationGroup="AddExercise" Display="Dynamic"></asp:RegularExpressionValidator>
+                       <asp:RequiredFieldValidator ID="RequiredFieldValidator3" runat="server" 
+                            ControlToValidate="tbEquipment" ErrorMessage="*Please enter equipment needed" 
+                            ForeColor="Red" ValidationGroup="ModifyExercise" Display="Dynamic"></asp:RequiredFieldValidator>
                     </td>
                     <td>
-                        <asp:RequiredFieldValidator ID="RequiredFieldValidator3" runat="server" 
-                            ControlToValidate="tbEquipment" ErrorMessage="*Please enter equipment needed" 
-                            ForeColor="Red" ValidationGroup="ModifyExercise"></asp:RequiredFieldValidator>
+
                     </td>
                 </tr>
                 <tr>
@@ -209,7 +237,7 @@
             </table>
             <br />
             <asp:Button ID="btnDeleteExercise" runat="server" Text="Delete Exercise" OnClientClick="return confirm('Doing this will irreversibly remove the exercise from the system. Are you sure?');"
-                OnClick="btnDeleteExercise_Click" />
+                OnClick="btnDeleteExercise_Click" ValidationGroup="ModifyExercise" />
             <asp:Label ID="lblDeletionResult" runat="server"></asp:Label>
         </div>
     </asp:Panel>

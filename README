@@ -1,1 +1,7 @@
-Neil's master branch that will contain awesome stuff!
+Download this repo via git or zip.
+
+Extract it into a folder.
+
+Open the folder as a website in Visual Studio 2010 or newer.
+
+Click default.aspx in root and hi ctrl+f5

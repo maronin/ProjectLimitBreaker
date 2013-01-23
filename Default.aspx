@@ -1,9 +1,0 @@
-﻿<%@ Page Title="" Language="C#" MasterPageFile="~/ui/mp/MasterPage.master" AutoEventWireup="true" CodeFile="default.aspx.cs" Inherits="_Default" %>
-
-<asp:Content ID="Content1" ContentPlaceHolderID="head" Runat="Server">
-</asp:Content>
-<asp:Content ID="Content2" ContentPlaceHolderID="ContentPlaceHolder1" Runat="Server">
-    <asp:LoginName ID="LoginName1" runat="server" />
-&nbsp;<asp:LoginStatus ID="LoginStatus1" runat="server" />
-</asp:Content>
-
